@@ -1,0 +1,192 @@
+import { useState } from 'react';
+import { Plus, Edit2, Trash2, Sparkles } from 'lucide-react';
+import type { Reflection } from '../App';
+
+interface TopicSelectionProps {
+  onSelectTopic: (topic: string) => void;
+  existingReflections: Reflection[];
+  onEdit: (reflection: Reflection) => void;
+  onDelete: (id: string) => void;
+  onFinish: () => void;
+}
+
+const SYSTEM_TOPICS = [
+  "What I'm leaving behind in 2024",
+  "My biggest lesson this year",
+  "What I'm grateful for",
+  "My word for 2025",
+  "A challenge I overcame",
+  "Someone who inspired me",
+  "A habit I want to build",
+  "What success means to me",
+  "My proudest moment",
+  "Where I found joy",
+  "A fear I faced",
+  "What I learned about myself",
+  "My vision for 2025",
+  "A relationship that grew",
+  "What I want more of",
+];
+
+export function TopicSelection({
+  onSelectTopic,
+  existingReflections,
+  onEdit,
+  onDelete,
+  onFinish,
+}: TopicSelectionProps) {
+  const [customTopic, setCustomTopic] = useState('');
+  const [showCustomInput, setShowCustomInput] = useState(false);
+
+  const usedTopics = new Set(existingReflections.map(r => r.topic));
+  const availableTopics = SYSTEM_TOPICS.filter(topic => !usedTopics.has(topic));
+  const canAddMore = existingReflections.length < 6;
+
+  const handleCustomSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (customTopic.trim()) {
+      onSelectTopic(customTopic.trim());
+      setCustomTopic('');
+      setShowCustomInput(false);
+    }
+  };
+
+  return (
+    <div className="space-y-8">
+      {/* Header */}
+      <div className="text-center space-y-4 pt-8">
+        <h1 className="text-neutral-900">2025 Reflections</h1>
+        <p className="text-neutral-600 max-w-md mx-auto">
+          Capture your thoughts, rate your growth, and share your journey
+        </p>
+      </div>
+
+      {/* Existing Reflections */}
+      {existingReflections.length > 0 && (
+        <div className="space-y-3">
+          <h2 className="text-neutral-700">Your Reflections</h2>
+          <div className="space-y-2">
+            {existingReflections.map((reflection) => (
+              <div
+                key={reflection.id}
+                className="bg-white border border-neutral-200 rounded-lg p-4 flex items-start justify-between gap-4"
+              >
+                <div className="flex-1 min-w-0">
+                  <div className="text-neutral-900">{reflection.topic}</div>
+                  <div className="text-neutral-500 truncate mt-1">
+                    {reflection.text}
+                  </div>
+                  <div className="text-neutral-400 mt-1">
+                    {reflection.rating}/10
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => onEdit(reflection)}
+                    className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                    aria-label="Edit reflection"
+                  >
+                    <Edit2 className="w-4 h-4 text-neutral-600" />
+                  </button>
+                  <button
+                    onClick={() => onDelete(reflection.id)}
+                    className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                    aria-label="Delete reflection"
+                  >
+                    <Trash2 className="w-4 h-4 text-neutral-600" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Add New Reflection */}
+      {canAddMore && (
+        <div className="space-y-4">
+          <h2 className="text-neutral-700">
+            {existingReflections.length === 0 ? 'Choose a topic' : 'Add another reflection'}
+          </h2>
+
+          {/* System Topics Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {availableTopics.slice(0, 8).map((topic) => (
+              <button
+                key={topic}
+                onClick={() => onSelectTopic(topic)}
+                className="bg-white border border-neutral-200 rounded-lg p-4 text-left hover:border-neutral-400 hover:shadow-sm transition-all"
+              >
+                <div className="text-neutral-900">{topic}</div>
+              </button>
+            ))}
+
+            {/* Custom Topic Card */}
+            {!showCustomInput ? (
+              <button
+                onClick={() => setShowCustomInput(true)}
+                className="bg-neutral-900 text-white rounded-lg p-4 flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
+              >
+                <Plus className="w-5 h-5" />
+                <span>Create your own</span>
+              </button>
+            ) : (
+              <form
+                onSubmit={handleCustomSubmit}
+                className="bg-white border-2 border-neutral-900 rounded-lg p-4"
+              >
+                <input
+                  type="text"
+                  value={customTopic}
+                  onChange={(e) => setCustomTopic(e.target.value)}
+                  placeholder="Enter custom topic..."
+                  className="w-full bg-transparent border-none outline-none text-neutral-900 placeholder:text-neutral-400"
+                  autoFocus
+                  maxLength={60}
+                />
+                <div className="flex gap-2 mt-3">
+                  <button
+                    type="submit"
+                    className="flex-1 bg-neutral-900 text-white rounded px-3 py-1.5 hover:bg-neutral-800 transition-colors"
+                  >
+                    Add
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowCustomInput(false);
+                      setCustomTopic('');
+                    }}
+                    className="px-3 py-1.5 text-neutral-600 hover:text-neutral-900 transition-colors"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Finish Button */}
+      {existingReflections.length > 0 && (
+        <div className="pt-4">
+          <button
+            onClick={onFinish}
+            className="w-full bg-neutral-900 text-white rounded-lg py-4 px-6 hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
+          >
+            <Sparkles className="w-5 h-5" />
+            <span>Finish & Create Summary</span>
+          </button>
+        </div>
+      )}
+
+      {/* Helper Text */}
+      {existingReflections.length === 0 && (
+        <div className="text-center text-neutral-400 pt-4">
+          Select a topic to begin your reflection
+        </div>
+      )}
+    </div>
+  );
+}
