@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Plus, Edit2, Trash2, Sparkles } from 'lucide-react';
 import type { Reflection } from '../App';
 
@@ -54,7 +54,7 @@ export function TopicSelection({
   return (
     <div className="space-y-8">
       {/* Header */}
-      <div className="text-center space-y-4 pt-8">
+      <div className="text-center space-y-4">
         <h1 className="text-neutral-900">2025 Reflections</h1>
         <p className="text-neutral-600 max-w-md mx-auto">
           Capture your thoughts, rate your growth, and share your journey
@@ -139,18 +139,12 @@ export function TopicSelection({
                   type="text"
                   value={customTopic}
                   onChange={(e) => setCustomTopic(e.target.value)}
-                  placeholder="Enter custom topic..."
+                  placeholder="Enter your topic..."
                   className="w-full bg-transparent border-none outline-none text-neutral-900 placeholder:text-neutral-400"
                   autoFocus
                   maxLength={60}
                 />
                 <div className="flex gap-2 mt-3">
-                  <button
-                    type="submit"
-                    className="flex-1 bg-neutral-900 text-white rounded px-3 py-1.5 hover:bg-neutral-800 transition-colors"
-                  >
-                    Add
-                  </button>
                   <button
                     type="button"
                     onClick={() => {
@@ -160,6 +154,12 @@ export function TopicSelection({
                     className="px-3 py-1.5 text-neutral-600 hover:text-neutral-900 transition-colors"
                   >
                     Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="flex-1 bg-neutral-900 text-white rounded px-3 py-1.5 hover:bg-neutral-800 transition-colors"
+                  >
+                    Add
                   </button>
                 </div>
               </form>
@@ -175,7 +175,6 @@ export function TopicSelection({
             onClick={onFinish}
             className="w-full bg-neutral-900 text-white rounded-lg py-4 px-6 hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
           >
-            <Sparkles className="w-5 h-5" />
             <span>Finish & Create Summary</span>
           </button>
         </div>

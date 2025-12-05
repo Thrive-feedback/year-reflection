@@ -1,7 +1,10 @@
+import React from "react";
+
 interface ProgressIndicatorProps {
   current: number;
   max: number;
 }
+
 
 export function ProgressIndicator({ current, max }: ProgressIndicatorProps) {
   return (

@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { Download, ArrowLeft, Sparkles, Share2 } from 'lucide-react';
 import type { Reflection } from '../App';
 import { StoryPreview } from './StoryPreview';

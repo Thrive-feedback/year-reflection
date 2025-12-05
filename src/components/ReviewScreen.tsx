@@ -1,3 +1,4 @@
+import React from 'react';
 import { ArrowLeft, Edit2, Star } from 'lucide-react';
 
 interface ReviewScreenProps {

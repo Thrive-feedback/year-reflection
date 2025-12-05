@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import React, { forwardRef } from 'react';
 import { Star, Sparkles } from 'lucide-react';
 import type { Reflection } from '../App';
 

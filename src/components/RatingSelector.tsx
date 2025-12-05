@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { ArrowLeft } from 'lucide-react';
 
 interface RatingSelectorProps {
@@ -21,21 +21,13 @@ export function RatingSelector({ topic, onComplete, onBack }: RatingSelectorProp
   const displayRating = hoveredRating || rating;
 
   return (
-    <div className="max-w-xl mx-auto py-12">
-      {/* Back Button */}
-      <button
-        onClick={onBack}
-        className="flex items-center gap-2 text-neutral-600 hover:text-neutral-900 transition-colors mb-8"
-      >
-        <ArrowLeft className="w-5 h-5" />
-        <span>Back</span>
-      </button>
+    <div className="">
 
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* Topic Reminder */}
         <div className="space-y-2">
           <div className="text-neutral-500">Rating</div>
-          <h2 className="text-neutral-900">{topic}</h2>
+          {/* <h2 className="text-neutral-900">{topic}</h2> */}
         </div>
 
         {/* Rating Question */}
