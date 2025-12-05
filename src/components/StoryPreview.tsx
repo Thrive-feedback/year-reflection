@@ -20,32 +20,41 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
       return (
         <div
           ref={ref}
-          className="w-[1080px] h-[1920px] bg-white p-24 flex flex-col"
+          style={{
+            width: '1080px',
+            height: '1920px',
+            backgroundColor: '#ffffff',
+            padding: '96px',
+            display: 'flex',
+            flexDirection: 'column',
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            color: '#0a0a0a'
+          }}
         >
           {/* Header */}
-          <div className="text-center mb-20">
-            <div className="text-8xl mb-6">2025</div>
-            <div className="text-5xl text-neutral-600">Reflections</div>
-            {userName && <div className="text-4xl text-neutral-400 mt-8">{userName}</div>}
+          <div style={{ textAlign: 'center', marginBottom: '80px' }}>
+            <div style={{ fontSize: '96px', marginBottom: '24px', color: '#0a0a0a' }}>2025</div>
+            <div style={{ fontSize: '48px', color: '#525252' }}>Reflections</div>
+            {userName && <div style={{ fontSize: '36px', color: '#a3a3a3', marginTop: '32px' }}>{userName}</div>}
           </div>
 
           {/* Reflections */}
-          <div className="flex-1 space-y-16">
-            {reflections.map((reflection, index) => (
-              <div key={reflection.id} className="border-l-4 border-neutral-900 pl-10">
-                <div className="text-3xl text-neutral-500 mb-4">
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '64px' }}>
+            {reflections.map((reflection) => (
+              <div key={reflection.id} style={{ borderLeft: '4px solid #0a0a0a', paddingLeft: '40px' }}>
+                <div style={{ fontSize: '28px', color: '#737373', marginBottom: '16px' }}>
                   {reflection.topic}
                 </div>
-                <div className="text-4xl text-neutral-900 mb-6 leading-snug">
+                <div style={{ fontSize: '36px', color: '#0a0a0a', marginBottom: '24px', lineHeight: '1.375' }}>
                   {reflection.text}
                 </div>
-                <div className="flex items-center gap-4">
-                  <div className="text-3xl">{reflection.rating}/10</div>
-                  <div className="flex gap-2">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <div style={{ fontSize: '28px', color: '#0a0a0a' }}>{reflection.rating}/10</div>
+                  <div style={{ display: 'flex', gap: '8px' }}>
                     {Array.from({ length: Math.min(reflection.rating, 10) }).map((_, i) => (
                       <div
                         key={i}
-                        className="w-4 h-4 bg-neutral-900 rounded-full"
+                        style={{ width: '16px', height: '16px', backgroundColor: '#0a0a0a', borderRadius: '50%' }}
                       />
                     ))}
                   </div>
@@ -55,7 +64,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
           </div>
 
           {/* Footer */}
-          <div className="text-center text-3xl text-neutral-400 mt-16">
+          <div style={{ textAlign: 'center', fontSize: '28px', color: '#a3a3a3', marginTop: '64px' }}>
             {currentDate}
           </div>
         </div>
@@ -66,43 +75,80 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
       return (
         <div
           ref={ref}
-          className="w-[1080px] h-[1920px] bg-gradient-to-br from-neutral-50 to-neutral-100 p-24 flex flex-col"
+          style={{
+            width: '1080px',
+            height: '1920px',
+            background: 'linear-gradient(to bottom right, #fafafa, #f5f5f5)',
+            padding: '96px',
+            display: 'flex',
+            flexDirection: 'column',
+            position: 'relative',
+            fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+            color: '#0a0a0a'
+          }}
         >
           {/* Decorative Elements */}
-          <div className="absolute top-0 left-0 w-full h-96 bg-gradient-to-b from-neutral-900/5 to-transparent" />
-          
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '384px',
+            background: 'linear-gradient(to bottom, rgba(10, 10, 10, 0.05), transparent)'
+          }} />
+
           {/* Header */}
-          <div className="text-center mb-20 relative">
-            <div className="inline-block p-6 rounded-full bg-white shadow-lg mb-8">
-              <Sparkles className="w-24 h-24 text-neutral-900" />
+          <div style={{ textAlign: 'center', marginBottom: '80px', position: 'relative', zIndex: 1 }}>
+            <div style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '24px',
+              borderRadius: '50%',
+              backgroundColor: '#ffffff',
+              boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+              marginBottom: '32px'
+            }}>
+              <Sparkles style={{ width: '96px', height: '96px', color: '#0a0a0a' }} />
             </div>
-            <div className="text-7xl mb-4">My 2025 Reflections</div>
-            {userName && <div className="text-4xl text-neutral-600 mt-6">{userName}</div>}
+            <div style={{ fontSize: '72px', marginBottom: '16px', color: '#0a0a0a' }}>My 2025 Reflections</div>
+            {userName && <div style={{ fontSize: '36px', color: '#525252', marginTop: '24px' }}>{userName}</div>}
           </div>
 
           {/* Reflections */}
-          <div className="flex-1 space-y-12">
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '48px', position: 'relative', zIndex: 1 }}>
             {reflections.map((reflection) => (
               <div
                 key={reflection.id}
-                className="bg-white rounded-3xl p-12 shadow-lg"
+                style={{
+                  backgroundColor: '#ffffff',
+                  borderRadius: '24px',
+                  padding: '48px',
+                  boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)'
+                }}
               >
-                <div className="text-3xl text-neutral-500 mb-6">
+                <div style={{ fontSize: '28px', color: '#737373', marginBottom: '24px' }}>
                   {reflection.topic}
                 </div>
-                <div className="text-4xl text-neutral-900 mb-8 leading-relaxed">
+                <div style={{ fontSize: '36px', color: '#0a0a0a', marginBottom: '32px', lineHeight: '1.625' }}>
                   "{reflection.text}"
                 </div>
-                <div className="flex items-center justify-between pt-6 border-t border-neutral-200">
-                  <div className="text-3xl text-neutral-600">Self-rating</div>
-                  <div className="text-5xl">{reflection.rating}/10</div>
+                <div style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingTop: '24px',
+                  borderTop: '1px solid #e5e5e5'
+                }}>
+                  <div style={{ fontSize: '28px', color: '#525252' }}>Self-rating</div>
+                  <div style={{ fontSize: '48px', color: '#0a0a0a' }}>{reflection.rating}/10</div>
                 </div>
               </div>
             ))}
           </div>
 
           {/* Footer */}
-          <div className="text-center text-3xl text-neutral-500 mt-16 relative">
+          <div style={{ textAlign: 'center', fontSize: '28px', color: '#737373', marginTop: '64px', position: 'relative', zIndex: 1 }}>
             {currentDate}
           </div>
         </div>
@@ -113,43 +159,73 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
     return (
       <div
         ref={ref}
-        className="w-[1080px] h-[1920px] bg-neutral-900 text-white p-24 flex flex-col"
+        style={{
+          width: '1080px',
+          height: '1920px',
+          backgroundColor: '#171717',
+          color: '#ffffff',
+          padding: '96px',
+          display: 'flex',
+          flexDirection: 'column',
+          fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif'
+        }}
       >
         {/* Header */}
-        <div className="mb-20">
-          <div className="text-9xl mb-4">2025</div>
-          <div className="text-6xl text-neutral-400">REFLECTIONS</div>
+        <div style={{ marginBottom: '80px' }}>
+          <div style={{ fontSize: '128px', marginBottom: '16px', color: '#ffffff' }}>2025</div>
+          <div style={{ fontSize: '60px', color: '#a3a3a3' }}>REFLECTIONS</div>
           {userName && (
-            <div className="text-4xl text-neutral-500 mt-8 uppercase tracking-wider">
+            <div style={{
+              fontSize: '36px',
+              color: '#737373',
+              marginTop: '32px',
+              textTransform: 'uppercase',
+              letterSpacing: '0.05em'
+            }}>
               {userName}
             </div>
           )}
         </div>
 
         {/* Reflections */}
-        <div className="flex-1 space-y-14">
+        <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '56px' }}>
           {reflections.map((reflection, index) => (
             <div key={reflection.id}>
-              <div className="flex items-start gap-8 mb-6">
-                <div className="text-7xl text-neutral-600">
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: '32px', marginBottom: '24px' }}>
+                <div style={{ fontSize: '72px', color: '#525252' }}>
                   {String(index + 1).padStart(2, '0')}
                 </div>
-                <div className="flex-1">
-                  <div className="text-3xl text-neutral-400 mb-4 uppercase tracking-wide">
+                <div style={{ flex: 1 }}>
+                  <div style={{
+                    fontSize: '28px',
+                    color: '#a3a3a3',
+                    marginBottom: '16px',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.025em'
+                  }}>
                     {reflection.topic}
                   </div>
-                  <div className="text-4xl leading-snug">
+                  <div style={{ fontSize: '36px', lineHeight: '1.375', color: '#ffffff' }}>
                     {reflection.text}
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-6 pl-32">
-                <div className="text-5xl">{reflection.rating}</div>
-                <div className="text-3xl text-neutral-500">/10</div>
-                <div className="flex-1 h-3 bg-neutral-800 rounded-full overflow-hidden">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '24px', paddingLeft: '128px' }}>
+                <div style={{ fontSize: '48px', color: '#ffffff' }}>{reflection.rating}</div>
+                <div style={{ fontSize: '28px', color: '#737373' }}>/10</div>
+                <div style={{
+                  flex: 1,
+                  height: '12px',
+                  backgroundColor: '#262626',
+                  borderRadius: '9999px',
+                  overflow: 'hidden'
+                }}>
                   <div
-                    className="h-full bg-white transition-all"
-                    style={{ width: `${(reflection.rating / 10) * 100}%` }}
+                    style={{
+                      height: '100%',
+                      backgroundColor: '#ffffff',
+                      width: `${(reflection.rating / 10) * 100}%`
+                    }}
                   />
                 </div>
               </div>
@@ -158,7 +234,13 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
         </div>
 
         {/* Footer */}
-        <div className="text-3xl text-neutral-600 mt-16 uppercase tracking-wider">
+        <div style={{
+          fontSize: '28px',
+          color: '#525252',
+          marginTop: '64px',
+          textTransform: 'uppercase',
+          letterSpacing: '0.05em'
+        }}>
           {currentDate}
         </div>
       </div>

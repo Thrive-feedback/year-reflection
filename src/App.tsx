@@ -62,7 +62,7 @@ export default function App() {
 
     if (editingId) {
       setReflections(
-        reflections.map((r) =>
+        reflections.map((r: Reflection) =>
           r.id === editingId
             ? {
                 ...r,
@@ -103,7 +103,7 @@ export default function App() {
 
   const handleDelete = (id: string) => {
     console.log(reflections)
-    setReflections(reflections.filter((r) => r.id !== id));
+    setReflections(reflections.filter((r: Reflection) => r.id !== id));
   };
 
   const handleFinish = () => {

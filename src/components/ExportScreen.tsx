@@ -16,7 +16,10 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
-    if (!previewRef.current) return;
+    if (!previewRef.current) {
+      console.error('Preview ref is not available');
+      return;
+    }
 
     try {
       // @ts-ignore
@@ -24,8 +27,15 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         backgroundColor: '#ffffff',
-        width: 1080,
-        height: 1920,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        foreignObjectRendering: false,
+        onclone: (clonedDoc: Document) => {
+          // Remove all style elements to prevent oklch parsing
+          const styles = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
+          styles.forEach(style => style.remove());
+        }
       });
 
       const link = document.createElement('a');
@@ -39,7 +49,10 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
   };
 
   const handleShare = async () => {
-    if (!previewRef.current) return;
+    if (!previewRef.current) {
+      console.error('Preview ref is not available');
+      return;
+    }
 
     try {
       // @ts-ignore
@@ -47,12 +60,22 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
       const canvas = await html2canvas(previewRef.current, {
         scale: 2,
         backgroundColor: '#ffffff',
-        width: 1080,
-        height: 1920,
+        useCORS: true,
+        allowTaint: true,
+        logging: false,
+        foreignObjectRendering: false,
+        onclone: (clonedDoc: Document) => {
+          // Remove all style elements to prevent oklch parsing
+          const styles = clonedDoc.querySelectorAll('style, link[rel="stylesheet"]');
+          styles.forEach(style => style.remove());
+        }
       });
 
       canvas.toBlob(async (blob) => {
-        if (!blob) return;
+        if (!blob) {
+          console.error('Failed to create blob');
+          return;
+        }
 
         const file = new File([blob], '2025-reflections.png', { type: 'image/png' });
 
@@ -70,7 +93,7 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
           // Fallback to download if sharing is not supported
           handleDownload();
         }
-      });
+      }, 'image/png');
     } catch (error) {
       console.error('Failed to share:', error);
       handleDownload();
@@ -157,7 +180,6 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
           <div className="w-[360px] h-[640px] overflow-hidden rounded-xl shadow-2xl border border-neutral-200">
             <div className="scale-[0.333] origin-top-left" style={{ width: '1080px', height: '1920px' }}>
               <StoryPreview
-                ref={previewRef}
                 reflections={reflections}
                 template={template}
                 userName={userName}
@@ -168,6 +190,29 @@ export function ExportScreen({ reflections, onStartOver, onBack }: ExportScreenP
             IG Story Preview
           </div>
         </div>
+      </div>
+
+      {/* Hidden full-size version for capture */}
+      <div
+        style={{
+          position: 'fixed',
+          left: '-9999px',
+          top: '-9999px',
+          fontFamily: 'system-ui, -apple-system, sans-serif',
+          color: '#000000',
+          backgroundColor: '#ffffff',
+          // Reset all CSS variables to prevent oklch inheritance
+          borderColor: '#e5e5e5',
+          outlineColor: '#a3a3a3',
+          isolation: 'isolate'
+        }}
+      >
+        <StoryPreview
+          ref={previewRef}
+          reflections={reflections}
+          template={template}
+          userName={userName}
+        />
       </div>
 
       {/* Action Buttons */}
