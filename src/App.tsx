@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { TopicSelection } from "./components/TopicSelection";
-import { ReflectionWriter } from "./components/ReflectionWriter";
-import { RatingSelector } from "./components/RatingSelector";
-import { ReviewScreen } from "./components/ReviewScreen";
-import { ExportScreen } from "./components/ExportScreen";
-import { ProgressIndicator } from "./components/ProgressIndicator";
+import { TopicSelection } from "./screens/TopicSelection";
+import { ReflectionWriter } from "./screens/ReflectionWriter";
+import { ExportScreen } from "./screens/ExportScreen";
+import { ProgressIndicator } from "./components/atoms/ProgressIndicator";
 
 export interface Reflection {
   id: string;
@@ -132,7 +130,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50">
+    <div className="min-h-screen bg-neutral-50 font-cooper">
       {/* Progress Indicator - Show on all steps except export */}
       {step !== "export" && reflections.length > 0 && (
         <ProgressIndicator current={reflections.length} max={6} />
