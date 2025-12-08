@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Plus, Edit2, Trash2, Sparkles } from "lucide-react";
 import type { Reflection } from "../App";
 import { Button } from "@/components/atoms/Button";
+import { Card } from "@/components/ui/card";
 
 interface TopicSelectionProps {
   onSelectTopic: (topic: string) => void;
@@ -72,7 +73,7 @@ export function TopicSelection({
           <h2 className="text-neutral-700">Your Reflections</h2>
           <div className="space-y-2">
             {existingReflections.map((reflection) => (
-              <div
+              <Card
                 key={reflection.id}
                 className="bg-white border border-neutral-200 rounded-lg p-4 flex items-start justify-between gap-4"
               >
@@ -101,7 +102,7 @@ export function TopicSelection({
                     <Trash2 className="w-4 h-4 text-neutral-600" />
                   </button>
                 </div>
-              </div>
+              </Card>
             ))}
           </div>
         </div>
@@ -119,14 +120,6 @@ export function TopicSelection({
           {/* System Topics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {availableTopics.slice(0, 8).map((topic) => (
-              // <button
-              //   key={topic}
-              //   onClick={() => onSelectTopic(topic)}
-              //   className="bg-white border border-neutral-200 rounded-lg p-4 text-left hover:border-neutral-400 hover:shadow-sm transition-all"
-              // >
-              //   <div className="text-neutral-900">{topic}</div>
-              // </button>
-
               <Button
                 size={"large"}
                 variant={"outlined"}
@@ -138,15 +131,7 @@ export function TopicSelection({
 
             {/* Custom Topic Card */}
             {!showCustomInput ? (
-              // <button
-              //   onClick={() => setShowCustomInput(true)}
-              //   className="bg-neutral-900 text-white rounded-lg p-4 flex items-center justify-center gap-2 hover:bg-neutral-800 transition-colors"
-              // >
-              //   <Plus className="w-5 h-5" />
-              //   <span>Create your own</span>
-              // </button>
               <Button
-                size={"large"}
                 variant={"outlined"}
                 iconLeft={<Plus className="w-5 h-5" />}
                 onClick={() => setShowCustomInput(true)}
