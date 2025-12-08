@@ -58,7 +58,7 @@ export function TopicSelection({
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-neutral-900 font-semibold text-3xl">
+        <h1 className="text-neutral-900 font-semibold text-4xl">
           First step to a better workday
         </h1>
         <p className="text-neutral-600 max-w-md mx-auto">
@@ -119,13 +119,21 @@ export function TopicSelection({
           {/* System Topics Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {availableTopics.slice(0, 8).map((topic) => (
-              <button
-                key={topic}
+              // <button
+              //   key={topic}
+              //   onClick={() => onSelectTopic(topic)}
+              //   className="bg-white border border-neutral-200 rounded-lg p-4 text-left hover:border-neutral-400 hover:shadow-sm transition-all"
+              // >
+              //   <div className="text-neutral-900">{topic}</div>
+              // </button>
+
+              <Button
+                size={"large"}
+                variant={"outlined"}
                 onClick={() => onSelectTopic(topic)}
-                className="bg-white border border-neutral-200 rounded-lg p-4 text-left hover:border-neutral-400 hover:shadow-sm transition-all"
               >
-                <div className="text-neutral-900">{topic}</div>
-              </button>
+                {topic}
+              </Button>
             ))}
 
             {/* Custom Topic Card */}
@@ -138,6 +146,7 @@ export function TopicSelection({
               //   <span>Create your own</span>
               // </button>
               <Button
+                size={"large"}
                 variant={"outlined"}
                 iconLeft={<Plus className="w-5 h-5" />}
                 onClick={() => setShowCustomInput(true)}

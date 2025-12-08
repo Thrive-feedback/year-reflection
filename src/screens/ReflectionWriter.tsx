@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { ArrowLeft } from "lucide-react";
+import { TextArea } from "@/components/atoms/TextArea";
+import { Button } from "@/components/atoms/Button";
 
 interface ReflectionWriterProps {
   topic: string;
   initialText: string;
-  initialRating: number
+  initialRating: number;
   onComplete: (text: string, rating: number) => void;
   onBack: () => void;
 }
@@ -29,7 +31,7 @@ export function ReflectionWriter({
   const [text, setText] = useState(initialText);
   const [rating, setRating] = useState<number>(initialRating);
   const [hoveredRating, setHoveredRating] = useState<number>(0);
-  
+
   const remainingChars = MAX_CHARACTERS - text.length;
   const placeholder =
     PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)];
@@ -70,12 +72,12 @@ export function ReflectionWriter({
 
         {/* Text Input */}
         <div className="space-y-3">
-          <textarea
+          <TextArea
             value={text}
             onChange={(e) => setText(e.target.value.slice(0, MAX_CHARACTERS))}
             placeholder={placeholder}
-            className="w-full min-h-[200px] p-6 bg-white border border-neutral-200 rounded-lg resize-none focus:outline-none focus:border-neutral-400 transition-colors text-neutral-900 placeholder:text-neutral-400"
             autoFocus
+            className="min-h-[140px] p-4"
           />
 
           {/* Character Counter */}
@@ -100,7 +102,7 @@ export function ReflectionWriter({
         {/* Rating Question */}
         <div className="text-center space-y-8">
           {/* Rating Display */}
-          <div className="py-8">
+          <div className="">
             <div className="text-neutral-900 text-7xl">
               {displayRating > 0 ? displayRating : "–"}
             </div>
@@ -108,36 +110,29 @@ export function ReflectionWriter({
           </div>
 
           {/* Rating Buttons */}
-          <div className="grid grid-cols-5 gap-3">
+          <div className="grid grid-cols-5 gap-1">
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <button
+              <Button
                 key={num}
+                variant={num === rating ? "contained" : "outlined"}
                 type="button"
                 onClick={() => setRating(num)}
                 onMouseEnter={() => setHoveredRating(num)}
                 onMouseLeave={() => setHoveredRating(0)}
-                className={`aspect-square rounded-lg border-2 transition-all ${
-                  num === rating
-                    ? "bg-neutral-900 text-white border-neutral-900"
-                    : num === hoveredRating
-                    ? "bg-neutral-100 border-neutral-400"
-                    : "bg-white border-neutral-200 hover:border-neutral-400"
-                }`}
               >
                 {num}
-              </button>
+              </Button>
             ))}
           </div>
         </div>
 
         {/* Continue Button */}
-        <button
+        <Button
           type="submit"
           disabled={rating === 0 || text.trim().length === 0}
-          className="w-full bg-neutral-900 text-white rounded-lg py-4 px-6 hover:bg-neutral-800 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
         >
           Select next topic
-        </button>
+        </Button>
       </form>
     </div>
   );
