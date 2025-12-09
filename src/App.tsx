@@ -139,7 +139,7 @@ export default function App() {
 
         {/* Progress Indicator - Show on all steps except export */}
         {step !== "export" && reflections.length > 0 && (
-          <ProgressIndicator current={reflections.length} max={6} />
+          <ProgressIndicator current={reflections.length} max={4} />
         )}
 
         {/* Main Content */}

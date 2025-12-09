@@ -4,6 +4,7 @@ import type { Reflection } from "../App";
 import { StoryPreview } from "../components/molecules/StoryPreview";
 import { Button } from "../components/atoms/Button";
 import { useLanguage } from "../hooks/useLanguage";
+import { Input } from "@/components/atoms/Input";
 
 interface ExportScreenProps {
   reflections: Reflection[];
@@ -144,7 +145,7 @@ export function ExportScreen({
           >
             {t("exportScreen.minimal")}
           </Button>
-          <Button
+          {/* <Button
             onClick={() => setTemplate("elegant")}
             variant="outlined"
             className={`flex-1 ${
@@ -154,7 +155,7 @@ export function ExportScreen({
             }`}
           >
             {t("exportScreen.elegant")}
-          </Button>
+          </Button> */}
           <Button
             onClick={() => setTemplate("bold")}
             variant="outlined"
@@ -170,7 +171,7 @@ export function ExportScreen({
       </div>
 
       {/* Name Input */}
-      <div className="max-w-2xl mx-auto space-y-3">
+      {/* <div className="max-w-2xl mx-auto space-y-3">
         {!showNameInput ? (
           <Button onClick={() => setShowNameInput(true)} variant="text">
             {t("exportScreen.addYourName")}
@@ -180,17 +181,10 @@ export function ExportScreen({
             <div className="text-neutral-700 font-cooper">
               {t("exportScreen.yourName")}
             </div>
-            <input
-              type="text"
-              value={userName}
-              onChange={(e) => setUserName(e.target.value)}
-              placeholder={t("exportScreen.placeholder")}
-              className="w-full px-4 py-3 bg-white border border-neutral-200 rounded-lg focus:outline-none focus:border-neutral-400 transition-colors"
-              maxLength={30}
-            />
+            <Input placeholder={t("exportScreen.placeholder")} variant="filled"/>
           </div>
         )}
-      </div>
+      </div> */}
 
       {/* Preview */}
       <div className="flex justify-center">
@@ -207,9 +201,9 @@ export function ExportScreen({
               />
             </div>
           </div>
-          <div className="absolute -top-2 -right-2 bg-neutral-900 text-white text-xs px-2 py-1 rounded">
+          {/* <div className="absolute -top-2 bg-neutral-900 text-white text-xs px-2 py-2 rounded">
             {t("exportScreen.igStoryPreview")}
-          </div>
+          </div> */}
         </div>
       </div>
 

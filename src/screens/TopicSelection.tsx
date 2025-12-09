@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Plus, Edit2, Trash2, Sparkles } from "lucide-react";
+import { Plus, Edit2, Trash2 } from "lucide-react";
 import type { Reflection } from "../App";
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
@@ -30,7 +30,7 @@ export function TopicSelection({
   const availableTopics = SYSTEM_TOPICS.filter(
     (topic: string) => !usedTopics.has(topic)
   );
-  const canAddMore = existingReflections.length < 6;
+  const canAddMore = existingReflections.length < 4;
 
   const handleCustomSubmit = (e: React.FormEvent) => {
     e.preventDefault();

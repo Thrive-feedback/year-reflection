@@ -2,7 +2,7 @@ import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
-const TextAreaVariants = cva(
+const InputVariants = cva(
   "flex flex-col items-start w-full",
   {
     variants: {
@@ -18,12 +18,12 @@ const TextAreaVariants = cva(
   }
 )
 
-const TextAreaInputVariants = cva(
-  "w-full rounded-[6px] border px-[8px] py-[10px] text-[16px] font-normal leading-[24px] text-[rgba(0,2,9,0.9)] placeholder:text-[rgba(0,2,9,0.32)] outline-none transition-all disabled:cursor-not-allowed disabled:opacity-50 min-h-[40px] field-sizing-content resize-y",
+const InputFieldVariants = cva(
+  "w-full rounded-[6px] border bg-white px-[8px] min-h-[40px] text-[16px] font-normal leading-[24px] text-[rgba(0,2,9,0.9)] placeholder:text-[rgba(0,2,9,0.32)] outline-none transition-all disabled:cursor-not-allowed disabled:opacity-50",
   {
     variants: {
       variant: {
-        outlined: "bg-white border-[rgba(0,0,0,0.12)] focus-visible:border-purple-600 focus-visible:ring-[3px] focus-visible:ring-purple-400/50",
+        outlined: "border-[rgba(0,0,0,0.12)] focus-visible:border-purple-600 focus-visible:ring-[3px] focus-visible:ring-purple-400/50",
         filled: "border-transparent bg-[rgba(0,0,0,0.06)] focus-visible:bg-[rgba(0,0,0,0.09)] focus-visible:ring-[3px] focus-visible:ring-purple-400/50",
       },
       hasError: {
@@ -66,17 +66,19 @@ const HelperTextVariants = cva(
   }
 )
 
-export interface TextAreaProps
-  extends React.ComponentProps<"textarea">,
-    VariantProps<typeof TextAreaVariants> {
+export interface InputProps
+  extends Omit<React.ComponentProps<"input">, "size">,
+    VariantProps<typeof InputVariants> {
   label?: string
   variant?: "outlined" | "filled"
   helperText?: string
   error?: boolean
   required?: boolean
+  startAdornment?: React.ReactNode
+  endAdornment?: React.ReactNode
 }
 
-const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
@@ -86,12 +88,14 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
       helperText,
       error = false,
       required = false,
+      startAdornment,
+      endAdornment,
       ...props
     },
     ref
   ) => {
     return (
-      <div className={cn(TextAreaVariants({ size }))}>
+      <div className={cn(InputVariants({ size }))}>
         {label && (
           <div className="flex gap-[4px] items-start">
             {required && (
@@ -104,11 +108,27 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
             </label>
           </div>
         )}
-        <textarea
-          ref={ref}
-          className={cn(TextAreaInputVariants({ variant, hasError: error, className }))}
-          {...props}
-        />
+        <div className="relative w-full">
+          {startAdornment && (
+            <div className="absolute left-[8px] top-1/2 -translate-y-1/2 flex items-center justify-center text-[rgba(0,0,0,0.32)]">
+              {startAdornment}
+            </div>
+          )}
+          <input
+            ref={ref}
+            className={cn(
+              InputFieldVariants({ variant, hasError: error, className }),
+              startAdornment && "pl-[40px]",
+              endAdornment && "pr-[40px]"
+            )}
+            {...props}
+          />
+          {endAdornment && (
+            <div className="absolute right-[8px] top-1/2 -translate-y-1/2 flex items-center justify-center text-[rgba(0,0,0,0.32)]">
+              {endAdornment}
+            </div>
+          )}
+        </div>
         {helperText && (
           <div className={cn(HelperTextVariants({ hasError: error }))}>
             {helperText}
@@ -119,6 +139,6 @@ const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
   }
 )
 
-TextArea.displayName = "TextArea"
+Input.displayName = "Input"
 
-export { TextArea, TextAreaVariants, TextAreaInputVariants }
+export { Input, InputVariants, InputFieldVariants }
