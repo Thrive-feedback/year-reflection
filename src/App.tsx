@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { TopicSelection } from "./screens/TopicSelection";
 import { ReflectionWriter } from "./screens/ReflectionWriter";
 import { ExportScreen } from "./screens/ExportScreen";
 import { ProgressIndicator } from "./components/atoms/ProgressIndicator";
+import { useLanguage } from "./hooks/useLanguage";
 
 export interface Reflection {
   id: string;
@@ -19,6 +20,7 @@ type Step =
   | "export";
 
 export default function App() {
+  const { t } = useLanguage();
   const [step, setStep] = useState<Step>("topic-selection");
   const [reflections, setReflections] = useState<Reflection[]>([]);
   const [currentTopic, setCurrentTopic] = useState<string>("");
@@ -108,11 +110,7 @@ export default function App() {
   };
 
   const handleStartOver = () => {
-    if (
-      confirm(
-        "Are you sure you want to start over? This will delete all your reflections."
-      )
-    ) {
+    if (confirm(t("app.confirmStartOver"))) {
       setReflections([]);
       localStorage.removeItem("new-year-reflections");
       setStep("topic-selection");
@@ -134,6 +132,11 @@ export default function App() {
 
       {/* Content wrapper with relative positioning to appear above pattern */}
       <div className="relative z-10">
+        {/* Header with Language Switcher */}
+        {/* <div className="max-w-2xl mx-auto px-4 py-4 flex justify-end">
+          <LanguageSwitcher />
+        </div> */}
+
         {/* Progress Indicator - Show on all steps except export */}
         {step !== "export" && reflections.length > 0 && (
           <ProgressIndicator current={reflections.length} max={6} />

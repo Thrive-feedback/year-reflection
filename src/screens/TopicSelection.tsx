@@ -3,6 +3,8 @@ import { Plus, Edit2, Trash2, Sparkles } from "lucide-react";
 import type { Reflection } from "../App";
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
+import { IconButton } from "@/components/atoms/IconButton";
+import { useLanguage } from "@/hooks/useLanguage";
 
 interface TopicSelectionProps {
   onSelectTopic: (topic: string) => void;
@@ -12,24 +14,6 @@ interface TopicSelectionProps {
   onFinish: () => void;
 }
 
-const SYSTEM_TOPICS = [
-  "What I'm leaving behind in 2024",
-  "My biggest lesson this year",
-  "What I'm grateful for",
-  "My word for 2025",
-  "A challenge I overcame",
-  "Someone who inspired me",
-  "A habit I want to build",
-  "What success means to me",
-  "My proudest moment",
-  "Where I found joy",
-  "A fear I faced",
-  "What I learned about myself",
-  "My vision for 2025",
-  "A relationship that grew",
-  "What I want more of",
-];
-
 export function TopicSelection({
   onSelectTopic,
   existingReflections,
@@ -37,12 +21,14 @@ export function TopicSelection({
   onDelete,
   onFinish,
 }: TopicSelectionProps) {
+  const { t } = useLanguage();
   const [customTopic, setCustomTopic] = useState("");
   const [showCustomInput, setShowCustomInput] = useState(false);
 
+  const SYSTEM_TOPICS = t("topicSelection.topics") as any;
   const usedTopics = new Set(existingReflections.map((r) => r.topic));
   const availableTopics = SYSTEM_TOPICS.filter(
-    (topic) => !usedTopics.has(topic)
+    (topic: string) => !usedTopics.has(topic)
   );
   const canAddMore = existingReflections.length < 6;
 
@@ -60,26 +46,28 @@ export function TopicSelection({
       {/* Header */}
       <div className="text-center space-y-4">
         <h1 className="text-neutral-900 font-semibold text-4xl font-cooper">
-          First step to a better workday
+          {t("topicSelection.title")}
         </h1>
         <p className="text-neutral-600 max-w-md mx-auto">
-          Capture your thoughts, rate your growth, and share your journey
+          {t("topicSelection.subtitle")}
         </p>
       </div>
 
       {/* Existing Reflections */}
       {existingReflections.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-neutral-700 font-cooper">Your Reflections</h2>
+          <h2 className="text-neutral-700 font-cooper">
+            {t("topicSelection.yourReflections")}
+          </h2>
           <div className="space-y-2">
             {existingReflections.map((reflection) => (
               <Card
                 key={reflection.id}
-                className="bg-white border border-neutral-200 rounded-lg p-4 flex items-start justify-between gap-4"
+                className="items-start justify-between gap-4 bg-purple-50"
               >
                 <div className="flex-1 min-w-0">
                   <div className="text-neutral-900">{reflection.topic}</div>
-                  <div className="text-neutral-500 truncate mt-1">
+                  <div className="text-neutral-500 mt-1 w-full whitespace-pre-wrap break-words">
                     {reflection.text}
                   </div>
                   <div className="text-neutral-400 mt-1">
@@ -87,20 +75,18 @@ export function TopicSelection({
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  <button
+                  <IconButton
                     onClick={() => onEdit(reflection)}
-                    className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                    icon={<Edit2 className="w-4 h-4" />}
+                    variant="outline"
                     aria-label="Edit reflection"
-                  >
-                    <Edit2 className="w-4 h-4 text-neutral-600" />
-                  </button>
-                  <button
+                  />
+                  <IconButton
                     onClick={() => onDelete(reflection.id)}
-                    className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
+                    icon={<Trash2 className="w-4 h-4" />}
+                    variant="outline"
                     aria-label="Delete reflection"
-                  >
-                    <Trash2 className="w-4 h-4 text-neutral-600" />
-                  </button>
+                  />
                 </div>
               </Card>
             ))}
@@ -113,8 +99,8 @@ export function TopicSelection({
         <div className="space-y-4">
           <h1 className="text-neutral-700 font-cooper">
             {existingReflections.length === 0
-              ? "Choose a topic"
-              : "Add another reflection"}
+              ? t("topicSelection.chooseATopic")
+              : t("topicSelection.addAnother")}
           </h1>
 
           {/* System Topics Grid */}
@@ -136,7 +122,7 @@ export function TopicSelection({
                 iconLeft={<Plus className="w-5 h-5" />}
                 onClick={() => setShowCustomInput(true)}
               >
-                Create your own
+                {t("topicSelection.createYourOwn")}
               </Button>
             ) : (
               <form
@@ -147,7 +133,7 @@ export function TopicSelection({
                   type="text"
                   value={customTopic}
                   onChange={(e) => setCustomTopic(e.target.value)}
-                  placeholder="Enter your topic..."
+                  placeholder={t("topicSelection.enterYourTopic")}
                   className="w-full bg-transparent border-none outline-none text-neutral-900 placeholder:text-neutral-400"
                   autoFocus
                   maxLength={60}
@@ -160,12 +146,11 @@ export function TopicSelection({
                       setShowCustomInput(false);
                       setCustomTopic("");
                     }}
-                    // className="px-3 py-1.5 text-neutral-600 hover:text-neutral-900 transition-colors"
                   >
-                    Cancel
+                    {t("topicSelection.cancel")}
                   </Button>
                   <Button type="submit" className="w-full">
-                    Add
+                    {t("topicSelection.add")}
                   </Button>
                 </div>
               </form>
@@ -178,7 +163,7 @@ export function TopicSelection({
       {existingReflections.length > 0 && (
         <div className="pt-4">
           <Button onClick={onFinish} className="w-full">
-            Finish & Create Summary
+            {t("topicSelection.finishCreateSummary")}
           </Button>
         </div>
       )}
@@ -186,7 +171,7 @@ export function TopicSelection({
       {/* Helper Text */}
       {existingReflections.length === 0 && (
         <div className="text-center text-neutral-400 pt-4">
-          Select a topic to begin your reflection
+          {t("topicSelection.selectToBegin")}
         </div>
       )}
     </div>

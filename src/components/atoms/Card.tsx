@@ -11,8 +11,8 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          "backdrop-blur-xl backdrop-filter rounded-[24px]",
-          "bg-white/40",
+          "p-4 flex",
+          "backdrop-blur backdrop-filter bg-[rgba(252,252,252,0.4)] rounded-[24px]",
           "shadow-[0px_6px_12px_-6px_rgba(157,94,185,0.2),0px_8px_24px_-4px_rgba(157,94,185,0.16)]",
           "border border-white border-opacity-25",
           // Inner glow effect (glossy effect)

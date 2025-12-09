@@ -1,5 +1,4 @@
-import React, { forwardRef } from "react";
-import { Star, Sparkles } from "lucide-react";
+import { forwardRef } from "react";
 import type { Reflection } from "../../App";
 
 interface StoryPreviewProps {
@@ -88,6 +87,9 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                     color: "#0a0a0a",
                     marginBottom: "24px",
                     lineHeight: "1.375",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   {reflection.text}
@@ -174,22 +176,6 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
           >
             <div
               style={{
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: "24px",
-                borderRadius: "50%",
-                backgroundColor: "#ffffff",
-                boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)",
-                marginBottom: "32px",
-              }}
-            >
-              <Sparkles
-                style={{ width: "96px", height: "96px", color: "#0a0a0a" }}
-              />
-            </div>
-            <div
-              style={{
                 fontSize: "72px",
                 marginBottom: "16px",
                 color: "#0a0a0a",
@@ -246,6 +232,9 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                     color: "#0a0a0a",
                     marginBottom: "32px",
                     lineHeight: "1.625",
+                    whiteSpace: "pre-wrap",
+                    wordBreak: "break-word",
+                    overflowWrap: "break-word",
                   }}
                 >
                   "{reflection.text}"
@@ -369,6 +358,9 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                       fontSize: "36px",
                       lineHeight: "1.375",
                       color: "#ffffff",
+                      whiteSpace: "pre-wrap",
+                      wordBreak: "break-word",
+                      overflowWrap: "break-word",
                     }}
                   >
                     {reflection.text}
