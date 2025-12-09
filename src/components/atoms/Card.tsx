@@ -1,8 +1,8 @@
-import * as React from "react"
-import { cn } from "@/lib/utils"
+import * as React from "react";
+import { cn } from "@/lib/utils";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
@@ -23,10 +23,10 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       >
         {children}
       </div>
-    )
+    );
   }
-)
+);
 
-Card.displayName = "Card"
+Card.displayName = "Card";
 
-export { Card }
+export { Card };

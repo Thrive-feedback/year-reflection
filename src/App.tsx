@@ -89,7 +89,6 @@ export default function App() {
     setStep("topic-selection");
   };
 
-
   const handleEdit = (reflection: Reflection) => {
     console.log(reflection);
     setEditingId(reflection.id);
@@ -100,7 +99,7 @@ export default function App() {
   };
 
   const handleDelete = (id: string) => {
-    console.log(reflections)
+    console.log(reflections);
     setReflections(reflections.filter((r: Reflection) => r.id !== id));
   };
 
@@ -123,32 +122,36 @@ export default function App() {
   const handleBack = () => {
     if (step === "write-reflection") {
       setStep("topic-selection");
-    }
-    else if (step === "export") {
+    } else if (step === "export") {
       setStep("topic-selection");
     }
   };
 
   return (
-    <div className="min-h-screen bg-neutral-50 font-cooper">
-      {/* Progress Indicator - Show on all steps except export */}
-      {step !== "export" && reflections.length > 0 && (
-        <ProgressIndicator current={reflections.length} max={6} />
-      )}
+    <div className="min-h-screen font-public-sans relative overflow-hidden">
+      {/* Minimal geometric pattern background */}
+      {/* <div className="absolute inset-0 opacity-40 bg-red-500"></div> */}
 
-      {/* Main Content */}
-      <div className="max-w-2xl mx-auto px-4 py-8">
-        {step === "topic-selection" && (
-          <TopicSelection
-            onSelectTopic={handleTopicSelect}
-            existingReflections={reflections}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-            onFinish={handleFinish}
-          />
+      {/* Content wrapper with relative positioning to appear above pattern */}
+      <div className="relative z-10">
+        {/* Progress Indicator - Show on all steps except export */}
+        {step !== "export" && reflections.length > 0 && (
+          <ProgressIndicator current={reflections.length} max={6} />
         )}
 
-        {step === "write-reflection" && (
+        {/* Main Content */}
+        <div className="max-w-2xl mx-auto px-4 py-8">
+          {step === "topic-selection" && (
+            <TopicSelection
+              onSelectTopic={handleTopicSelect}
+              existingReflections={reflections}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onFinish={handleFinish}
+            />
+          )}
+
+          {step === "write-reflection" && (
             <ReflectionWriter
               topic={currentTopic}
               initialText={currentText}
@@ -156,15 +159,16 @@ export default function App() {
               onComplete={handleReflectionComplete}
               onBack={handleBack}
             />
-        )}
+          )}
 
-        {step === "export" && (
-          <ExportScreen
-            reflections={reflections}
-            onStartOver={handleStartOver}
-            onBack={() => setStep("topic-selection")}
-          />
-        )}
+          {step === "export" && (
+            <ExportScreen
+              reflections={reflections}
+              onStartOver={handleStartOver}
+              onBack={() => setStep("topic-selection")}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

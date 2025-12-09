@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Plus, Edit2, Trash2, Sparkles } from "lucide-react";
 import type { Reflection } from "../App";
 import { Button } from "@/components/atoms/Button";
-import { Card } from "@/components/ui/card";
+import { Card } from "@/components/atoms/Card";
 
 interface TopicSelectionProps {
   onSelectTopic: (topic: string) => void;
@@ -59,7 +59,7 @@ export function TopicSelection({
     <div className="space-y-8">
       {/* Header */}
       <div className="text-center space-y-4">
-        <h1 className="text-neutral-900 font-semibold text-4xl">
+        <h1 className="text-neutral-900 font-semibold text-4xl font-cooper">
           First step to a better workday
         </h1>
         <p className="text-neutral-600 max-w-md mx-auto">
@@ -70,7 +70,7 @@ export function TopicSelection({
       {/* Existing Reflections */}
       {existingReflections.length > 0 && (
         <div className="space-y-3">
-          <h2 className="text-neutral-700">Your Reflections</h2>
+          <h2 className="text-neutral-700 font-cooper">Your Reflections</h2>
           <div className="space-y-2">
             {existingReflections.map((reflection) => (
               <Card
@@ -111,7 +111,7 @@ export function TopicSelection({
       {/* Add New Reflection */}
       {canAddMore && (
         <div className="space-y-4">
-          <h1 className="text-neutral-700">
+          <h1 className="text-neutral-700 font-cooper">
             {existingReflections.length === 0
               ? "Choose a topic"
               : "Add another reflection"}
@@ -132,7 +132,7 @@ export function TopicSelection({
             {/* Custom Topic Card */}
             {!showCustomInput ? (
               <Button
-                variant={"outlined"}
+                variant={"text"}
                 iconLeft={<Plus className="w-5 h-5" />}
                 onClick={() => setShowCustomInput(true)}
               >
