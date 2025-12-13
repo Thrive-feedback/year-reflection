@@ -37,8 +37,8 @@
   },
   "reflectionWriter": {
     "title": "Reflecting on",
-    "step1": "1. Reflecting on",
-    "step2": "2. Rating",
+    "step1": "Step 1. Reflecting on",
+    "step2": "Step 2. Rating",
     "startWriting": "Start writing your reflection",
     "keepGoing": "Keep going...",
     "lookingGood": "Looking good!",
