@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { TopicSelection } from "./screens/TopicSelection";
 import { ReflectionWriter } from "./screens/ReflectionWriter";
 import { ExportScreen } from "./screens/ExportScreen";
 import { ProgressIndicator } from "./components/atoms/ProgressIndicator";
@@ -9,24 +8,12 @@ export interface Reflection {
   id: string;
   topic: string;
   text: string;
-  rating: number;
 }
-
-type Step =
-  | "topic-selection"
-  | "write-reflection"
-  | "rate-reflection"
-  | "review"
-  | "export";
 
 export default function App() {
   const { t } = useLanguage();
-  const [step, setStep] = useState<Step>("topic-selection");
   const [reflections, setReflections] = useState<Reflection[]>([]);
-  const [currentTopic, setCurrentTopic] = useState<string>("");
   const [currentText, setCurrentText] = useState<string>("");
-  const [currentRating, setCurrentRating] = useState<number>(0);
-  const [editingId, setEditingId] = useState<string | null>(null);
 
   // Load saved reflections from localStorage
   useEffect(() => {
@@ -49,79 +36,39 @@ export default function App() {
     }
   }, [reflections]);
 
-  const handleTopicSelect = (topic: string) => {
-    setCurrentTopic(topic);
+  const FIXED_TOPICS = t("topicSelection.topics") as unknown as string[];
+  const currentTopicIndex = reflections.length;
+  const isComplete = currentTopicIndex >= FIXED_TOPICS.length;
+
+  const handleReflectionComplete = (text: string) => {
+    const newReflection: Reflection = {
+      id: Date.now().toString(),
+      topic: FIXED_TOPICS[currentTopicIndex],
+      text: text,
+    };
+
+    setReflections([...reflections, newReflection]);
     setCurrentText("");
-    setCurrentRating(0);
-    setStep("write-reflection");
-  };
-
-  const handleReflectionComplete = (text: string, rating: number) => {
-    setCurrentText(text);
-    setCurrentRating(rating);
-
-    if (editingId) {
-      setReflections(
-        reflections.map((r: Reflection) =>
-          r.id === editingId
-            ? {
-                ...r,
-                topic: currentTopic,
-                text: text,
-                rating: rating,
-              }
-            : r
-        )
-      );
-      setEditingId(null);
-    } else {
-      const newReflection: Reflection = {
-        id: Date.now().toString(),
-        topic: currentTopic,
-        text: text,
-        rating: rating,
-      };
-      setReflections([...reflections, newReflection]);
-    }
-
-    // Reset current state
-    setCurrentTopic("");
-    setCurrentText("");
-    setCurrentRating(0);
-    setStep("topic-selection");
-  };
-
-  const handleEdit = (reflection: Reflection) => {
-    console.log(reflection);
-    setEditingId(reflection.id);
-    setCurrentTopic(reflection.topic);
-    setCurrentText(reflection.text);
-    setCurrentRating(reflection.rating);
-    setStep("write-reflection");
-  };
-
-  const handleDelete = (id: string) => {
-    console.log(reflections);
-    setReflections(reflections.filter((r: Reflection) => r.id !== id));
-  };
-
-  const handleFinish = () => {
-    setStep("export");
   };
 
   const handleStartOver = () => {
     if (confirm(t("app.confirmStartOver"))) {
       setReflections([]);
       localStorage.removeItem("new-year-reflections");
-      setStep("topic-selection");
+      setCurrentText("");
     }
   };
 
   const handleBack = () => {
-    if (step === "write-reflection") {
-      setStep("topic-selection");
-    } else if (step === "export") {
-      setStep("topic-selection");
+    if (reflections.length > 0) {
+      // Go back to previous step by removing the last reflection
+      const newReflections = [...reflections];
+      const last = newReflections.pop();
+      setReflections(newReflections);
+      // Restore previous state to allow editing
+      if (last) {
+        setCurrentText(last.text);
+      }
     }
   };
 
@@ -132,43 +79,28 @@ export default function App() {
 
       {/* Content wrapper with relative positioning to appear above pattern */}
       <div className="relative z-10">
-        {/* Header with Language Switcher */}
-        {/* <div className="max-w-2xl mx-auto px-4 py-4 flex justify-end">
-          <LanguageSwitcher />
-        </div> */}
-
         {/* Progress Indicator - Show on all steps except export */}
-        {step !== "export" && reflections.length > 0 && (
-          <ProgressIndicator current={reflections.length} max={4} />
+        {!isComplete && (
+          <ProgressIndicator
+            current={currentTopicIndex + 1}
+            max={FIXED_TOPICS.length}
+          />
         )}
 
         {/* Main Content */}
         <div className="max-w-2xl mx-auto px-4 py-8">
-          {step === "topic-selection" && (
-            <TopicSelection
-              onSelectTopic={handleTopicSelect}
-              existingReflections={reflections}
-              onEdit={handleEdit}
-              onDelete={handleDelete}
-              onFinish={handleFinish}
-            />
-          )}
-
-          {step === "write-reflection" && (
+          {!isComplete ? (
             <ReflectionWriter
-              topic={currentTopic}
+              topic={FIXED_TOPICS[currentTopicIndex] || ""}
               initialText={currentText}
-              initialRating={currentRating}
               onComplete={handleReflectionComplete}
               onBack={handleBack}
             />
-          )}
-
-          {step === "export" && (
+          ) : (
             <ExportScreen
               reflections={reflections}
               onStartOver={handleStartOver}
-              onBack={() => setStep("topic-selection")}
+              onBack={handleBack}
             />
           )}
         </div>

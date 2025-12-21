@@ -1,11 +1,22 @@
 import { useState, useRef, useEffect } from "react";
-import { Download, ArrowLeft, Share2, Sparkles, Copy, Check } from "lucide-react";
+import {
+  Download,
+  ArrowLeft,
+  Share2,
+  Sparkles,
+  Copy,
+  Check,
+} from "lucide-react";
 import type { Reflection } from "../App";
 import { StoryPreview } from "../components/molecules/StoryPreview";
 import { Button } from "../components/atoms/Button";
 import { useLanguage } from "../hooks/useLanguage";
 import { Input } from "@/components/atoms/Input";
-import { getAnimalRecommendation, getAnimalEmoji, getAnimalImage, type AnimalRecommendation } from "../lib/gemini";
+import {
+  getAnimalRecommendation,
+  getAnimalImage,
+  type AnimalRecommendation,
+} from "../lib/gemini";
 
 interface ExportScreenProps {
   reflections: Reflection[];
@@ -28,12 +39,16 @@ export function ExportScreen({
   const previewRef = useRef<HTMLDivElement>(null);
 
   // Gemini AI states
-  const [geminiApiKey, setGeminiApiKey] = useState(import.meta.env.VITE_GEMINI_API_KEY || "");
+  const [geminiApiKey, setGeminiApiKey] = useState(
+    import.meta.env.VITE_GEMINI_API_KEY || ""
+  );
   const [isGenerating, setIsGenerating] = useState(false);
-  const [animalResult, setAnimalResult] = useState<AnimalRecommendation | null>(null);
+  const [animalResult, setAnimalResult] = useState<AnimalRecommendation | null>(
+    null
+  );
   const [error, setError] = useState<string>("");
   const [selectedVersion, setSelectedVersion] = useState<1 | 2>(1);
-  const [selectedLang, setSelectedLang] = useState<"en" | "th">("en");
+  // const [selectedLang, setSelectedLang] = useState<"en" | "th">("en");
   const [copiedEn, setCopiedEn] = useState(false);
   const [copiedTh, setCopiedTh] = useState(false);
 
@@ -167,7 +182,11 @@ export function ExportScreen({
       localStorage.setItem(STORAGE_KEY, JSON.stringify(result));
     } catch (err) {
       console.error("Failed to generate animal recommendation:", err);
-      setError(err instanceof Error ? err.message : "Failed to generate recommendation. Please try again.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Failed to generate recommendation. Please try again."
+      );
     } finally {
       setIsGenerating(false);
     }
@@ -211,9 +230,7 @@ export function ExportScreen({
 
       {/* Export Mode Toggle */}
       <div className="max-w-2xl mx-auto">
-        <div className="text-neutral-700 font-cooper">
-          Export Format
-        </div>
+        <div className="text-neutral-700 font-cooper">Export Format</div>
         <div className="flex gap-3">
           <Button
             onClick={() => setExportMode("image")}
@@ -242,114 +259,114 @@ export function ExportScreen({
 
       {exportMode === "plainText" ? (
         <>
-      <div className="max-w-2xl mx-auto space-y-1">
-        <div className="text-neutral-700 font-cooper">
-          {t("exportScreen.chooseStyle")}
-        </div>
-        <div className="flex gap-3">
-          <Button
-            onClick={() => setTemplate("minimal")}
-            variant="outlined"
-            className={`flex-1 ${
-              template === "minimal"
-                ? "border-purple-600 bg-purple-50"
-                : "border-neutral-200"
-            }`}
-          >
-            {t("exportScreen.minimal")}
-          </Button>
-          <Button
-            onClick={() => setTemplate("bold")}
-            variant="outlined"
-            className={`flex-1 ${
-              template === "bold"
-                ? "border-purple-600 bg-purple-50"
-                : "border-neutral-200"
-            }`}
-          >
-            {t("exportScreen.bold")}
-          </Button>
-        </div>
-      </div>
-      {/* Preview */}
-      <div className="flex justify-center">
-        <div className="relative">
-          <div className="w-[360px] h-[640px] overflow-hidden rounded-xl shadow-2xl border border-neutral-200">
-            <div
-              className="scale-[0.333] origin-top-left"
-              style={{ width: "1080px", height: "1920px" }}
-            >
-              <StoryPreview
-                reflections={reflections}
-                template={template}
-                userName={userName}
-              />
+          <div className="max-w-2xl mx-auto space-y-1">
+            <div className="text-neutral-700 font-cooper">
+              {t("exportScreen.chooseStyle")}
+            </div>
+            <div className="flex gap-3">
+              <Button
+                onClick={() => setTemplate("minimal")}
+                variant="outlined"
+                className={`flex-1 ${
+                  template === "minimal"
+                    ? "border-purple-600 bg-purple-50"
+                    : "border-neutral-200"
+                }`}
+              >
+                {t("exportScreen.minimal")}
+              </Button>
+              <Button
+                onClick={() => setTemplate("bold")}
+                variant="outlined"
+                className={`flex-1 ${
+                  template === "bold"
+                    ? "border-purple-600 bg-purple-50"
+                    : "border-neutral-200"
+                }`}
+              >
+                {t("exportScreen.bold")}
+              </Button>
             </div>
           </div>
-        </div>
-      </div>
+          {/* Preview */}
+          <div className="flex justify-center">
+            <div className="relative">
+              <div className="w-[360px] h-[640px] overflow-hidden rounded-xl shadow-2xl border border-neutral-200">
+                <div
+                  className="scale-[0.333] origin-top-left"
+                  style={{ width: "1080px", height: "1920px" }}
+                >
+                  <StoryPreview
+                    reflections={reflections}
+                    template={template}
+                    userName={userName}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
 
-      {/* Hidden full-size version for capture */}
-      <div
-        style={{
-          position: "fixed",
-          left: "-9999px",
-          top: "-9999px",
-          fontFamily: "system-ui, -apple-system, sans-serif",
-          color: "#000000",
-          backgroundColor: "#ffffff",
-          // Reset all CSS variables to prevent oklch inheritance
-          borderColor: "#e5e5e5",
-          outlineColor: "#a3a3a3",
-          isolation: "isolate",
-        }}
-      >
-        <StoryPreview
-          ref={previewRef}
-          reflections={reflections}
-          template={template}
-          userName={userName}
-        />
-      </div>
-
-      {/* Action Buttons */}
-      <div className="max-w-2xl mx-auto space-y-3">
-        <Button
-          onClick={handleShare}
-          iconLeft={<Share2 className="w-5 h-5" />}
-          className="w-full"
-        >
-          {t("exportScreen.shareInstagram")}
-        </Button>
-
-        <Button
-          onClick={handleDownload}
-          variant="outlined"
-          iconLeft={<Download className="w-5 h-5" />}
-          className="w-full"
-        >
-          {t("exportScreen.downloadImage")}
-        </Button>
-
-        <div className="flex gap-3 pt-4">
-          <Button
-            onClick={onBack}
-            variant="text"
-            iconLeft={<ArrowLeft className="w-4 h-4" />}
-            className="flex-1"
+          {/* Hidden full-size version for capture */}
+          <div
+            style={{
+              position: "fixed",
+              left: "-9999px",
+              top: "-9999px",
+              fontFamily: "system-ui, -apple-system, sans-serif",
+              color: "#000000",
+              backgroundColor: "#ffffff",
+              // Reset all CSS variables to prevent oklch inheritance
+              borderColor: "#e5e5e5",
+              outlineColor: "#a3a3a3",
+              isolation: "isolate",
+            }}
           >
-            {t("exportScreen.addMore")}
-          </Button>
-          <Button onClick={onStartOver} variant="text" className="flex-1">
-            {t("exportScreen.startOver")}
-          </Button>
-        </div>
-      </div>
+            <StoryPreview
+              ref={previewRef}
+              reflections={reflections}
+              template={template}
+              userName={userName}
+            />
+          </div>
 
-      {/* Helper Text */}
-      <p className="text-center text-neutral-400 max-w-md mx-auto">
-        {t("exportScreen.tip")}
-      </p>
+          {/* Action Buttons */}
+          <div className="max-w-2xl mx-auto space-y-3">
+            <Button
+              onClick={handleShare}
+              iconLeft={<Share2 className="w-5 h-5" />}
+              className="w-full"
+            >
+              {t("exportScreen.shareInstagram")}
+            </Button>
+
+            <Button
+              onClick={handleDownload}
+              variant="outlined"
+              iconLeft={<Download className="w-5 h-5" />}
+              className="w-full"
+            >
+              {t("exportScreen.downloadImage")}
+            </Button>
+
+            <div className="flex gap-3 pt-4">
+              <Button
+                onClick={onBack}
+                variant="text"
+                iconLeft={<ArrowLeft className="w-4 h-4" />}
+                className="flex-1"
+              >
+                {t("exportScreen.addMore")}
+              </Button>
+              <Button onClick={onStartOver} variant="text" className="flex-1">
+                {t("exportScreen.startOver")}
+              </Button>
+            </div>
+          </div>
+
+          {/* Helper Text */}
+          <p className="text-center text-neutral-400 max-w-md mx-auto">
+            {t("exportScreen.tip")}
+          </p>
         </>
       ) : (
         // Image mode - AI Animal Recommendation
@@ -361,7 +378,8 @@ export function ExportScreen({
               </h2>
             </div>
             <p className="text-neutral-500">
-              Let AI analyze your reflections and tell you which animal represents you best
+              Let AI analyze your reflections and tell you which animal
+              represents you best
             </p>
           </div>
 
@@ -424,7 +442,7 @@ export function ExportScreen({
                     />
                   </div>
                   <h3 className="text-3xl font-cooper text-neutral-800">
-                    You are a {animalResult.animal}!
+                    You are {animalResult.title}!
                   </h3>
                   <Button
                     onClick={handleDownloadAnimalImage}
@@ -434,6 +452,30 @@ export function ExportScreen({
                   >
                     Download Image
                   </Button>
+
+                  {/* Trait Stats */}
+                  {animalResult.stats && (
+                    <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-4 text-left border-t border-neutral-200 mt-4">
+                      {Object.entries(animalResult.stats).map(
+                        ([key, value]) => (
+                          <div key={key} className="space-y-1">
+                            <div className="flex justify-between text-xs text-neutral-600 font-medium uppercase tracking-wider">
+                              <span>{key}</span>
+                              <span>{value}%</span>
+                            </div>
+                            <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
+                              <div
+                                className="h-full bg-neutral-800 transition-all duration-1000 ease-out"
+                                style={{
+                                  width: `${value}%`,
+                                }}
+                              />
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -502,14 +544,26 @@ export function ExportScreen({
               {/* Description Display */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-neutral-600">English</div>
+                  <div className="text-sm font-medium text-neutral-600">
+                    English
+                  </div>
                   <Button
-                    onClick={() => handleCopyText(
-                      selectedVersion === 1 ? animalResult.version1En : animalResult.version2En,
-                      "en"
-                    )}
+                    onClick={() =>
+                      handleCopyText(
+                        selectedVersion === 1
+                          ? animalResult.version1En
+                          : animalResult.version2En,
+                        "en"
+                      )
+                    }
                     variant="text"
-                    iconLeft={copiedEn ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    iconLeft={
+                      copiedEn ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )
+                    }
                     className="text-sm"
                   >
                     {copiedEn ? "Copied!" : "Copy"}
@@ -525,14 +579,26 @@ export function ExportScreen({
 
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-neutral-600">Thai</div>
+                  <div className="text-sm font-medium text-neutral-600">
+                    Thai
+                  </div>
                   <Button
-                    onClick={() => handleCopyText(
-                      selectedVersion === 1 ? animalResult.version1Th : animalResult.version2Th,
-                      "th"
-                    )}
+                    onClick={() =>
+                      handleCopyText(
+                        selectedVersion === 1
+                          ? animalResult.version1Th
+                          : animalResult.version2Th,
+                        "th"
+                      )
+                    }
                     variant="text"
-                    iconLeft={copiedTh ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    iconLeft={
+                      copiedTh ? (
+                        <Check className="w-4 h-4" />
+                      ) : (
+                        <Copy className="w-4 h-4" />
+                      )
+                    }
                     className="text-sm"
                   >
                     {copiedTh ? "Copied!" : "Copy"}

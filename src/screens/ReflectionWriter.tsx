@@ -7,8 +7,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 interface ReflectionWriterProps {
   topic: string;
   initialText: string;
-  initialRating: number;
-  onComplete: (text: string, rating: number) => void;
+  onComplete: (text: string) => void;
   onBack: () => void;
 }
 
@@ -17,35 +16,23 @@ const MAX_CHARACTERS = 120;
 export function ReflectionWriter({
   topic,
   initialText,
-  initialRating,
   onComplete,
   onBack,
 }: ReflectionWriterProps) {
   const { t } = useLanguage();
   const [text, setText] = useState(initialText);
-  const [rating, setRating] = useState<number>(initialRating);
-  const [hoveredRating, setHoveredRating] = useState<number>(0);
 
   const remainingChars = MAX_CHARACTERS - text.length;
   const PLACEHOLDERS = t("reflectionWriter.placeholders") as any;
   const placeholder =
     PLACEHOLDERS[Math.floor(Math.random() * PLACEHOLDERS.length)];
 
-  // const handleSubmit = (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   if (text.trim()) {
-  //     // onComplete(text.trim());
-  //   }
-  // };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (rating > 0 && text.trim()) {
-      onComplete(text.trim(), rating);
+    if (text.trim()) {
+      onComplete(text.trim());
     }
   };
-
-  const displayRating = hoveredRating || rating;
 
   return (
     <div className="flex flex-col">
@@ -100,42 +87,11 @@ export function ReflectionWriter({
 
         <hr />
 
-        {/* Rating Question */}
-        <div className="text-neutral-500">{t("reflectionWriter.step2")}</div>
-        <div className="text-center space-y-8">
-          {/* Rating Display */}
-          <div className="">
-            <div className="text-neutral-900 text-7xl font-cooper">
-              {displayRating > 0 ? displayRating : "–"}
-            </div>
-            <div className="text-neutral-400 mt-2">
-              {t("reflectionWriter.outOf10")}
-            </div>
-          </div>
-
-          {/* Rating Buttons */}
-          <div className="grid grid-cols-5 gap-1">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
-              <Button
-                size={"medium"}
-                key={num}
-                variant={num === rating ? "contained" : "outlined"}
-                type="button"
-                onClick={() => setRating(num)}
-                onMouseEnter={() => setHoveredRating(num)}
-                onMouseLeave={() => setHoveredRating(0)}
-              >
-                {num}
-              </Button>
-            ))}
-          </div>
-        </div>
-
         {/* Continue Button */}
         <Button
           className="mt-4"
           type="submit"
-          disabled={rating === 0 || text.trim().length === 0}
+          disabled={text.trim().length === 0}
         >
           {t("reflectionWriter.selectNext")}
         </Button>

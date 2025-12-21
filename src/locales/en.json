@@ -17,35 +17,20 @@
     "finishCreateSummary": "Finish & Create Summary",
     "selectToBegin": "Select a topic to begin your reflection",
     "topics": [
-      "What I'm leaving behind in 2024",
-      "My biggest lesson this year",
-      "A moment that changed my perspective",
-      "How I've grown as a person",
       "What I'm proud of achieving",
-      "Relationships that matter most to me",
       "My biggest challenge and what I learned",
-      "Where I want to be in 2025",
-      "What success looks like to me",
-      "A skill I want to develop",
-      "My core values and how I'm living them",
-      "What brings me joy",
-      "Something I'm grateful for",
-      "How I want to spend my time",
-      "My definition of a good year",
-      "What I want to be remembered for"
+      "Relationships that matter most to me",
+      "What I'm leaving behind 2024"
     ]
   },
   "reflectionWriter": {
     "title": "Reflecting on",
     "step1": "Step 1. Reflecting on",
-    "step2": "Step 2. Rating",
     "startWriting": "Start writing your reflection",
     "keepGoing": "Keep going...",
     "lookingGood": "Looking good!",
     "charsLeft": "characters left",
     "maxReached": "Maximum length reached",
-    "ratingQuestion": "How do you rate yourself in this area?",
-    "outOf10": "out of 10",
     "selectNext": "Select next topic",
     "placeholders": [
       "Share your thoughts...",
@@ -54,14 +39,6 @@
       "Your story matters...",
       "Write from the heart..."
     ]
-  },
-  "ratingSelector": {
-    "rating": "Rating",
-    "ratingQuestion": "How do you rate yourself in this area?",
-    "outOf10": "out of 10",
-    "roomToGrow": "Room to grow",
-    "thriving": "Thriving",
-    "continueReview": "Continue to Review"
   },
   "exportScreen": {
     "title": "Your 2025 Reflections",
