@@ -78,25 +78,25 @@ export default function App() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Orb 1: Brand Purple (Top Left) */}
         <div
-          className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-200/40 blur-[100px] animate-pulse"
+          className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-200/25 blur-[100px] animate-pulse"
           style={{ animationDuration: "4s" }}
         />
 
         {/* Orb 2: Soft Blue/Teal (Top Right) */}
         <div
-          className="absolute top-[-5%] right-[-10%] w-[40%] h-[60%] rounded-full bg-teal-200/30 blur-[120px] animate-pulse"
+          className="absolute top-[-5%] right-[-10%] w-[40%] h-[60%] rounded-full bg-teal-200/20 blur-[120px] animate-pulse"
           style={{ animationDuration: "7s", animationDelay: "1s" }}
         />
 
         {/* Orb 3: Warm Rose/Pink (Bottom Left) */}
         <div
-          className="absolute bottom-[-10%] left-[10%] w-[45%] h-[45%] rounded-full bg-rose-200/30 blur-[110px] animate-pulse"
+          className="absolute bottom-[-10%] left-[10%] w-[45%] h-[45%] rounded-full bg-rose-200/20 blur-[110px] animate-pulse"
           style={{ animationDuration: "6s", animationDelay: "2s" }}
         />
 
         {/* Orb 4: Subtle Yellow (Bottom Right) */}
         <div
-          className="absolute bottom-[10%] right-[-5%] w-[35%] h-[50%] rounded-full bg-yellow-100/40 blur-[90px] animate-pulse"
+          className="absolute bottom-[10%] right-[-5%] w-[35%] h-[50%] rounded-full bg-yellow-100/25 blur-[90px] animate-pulse"
           style={{ animationDuration: "5s", animationDelay: "0.5s" }}
         />
 
@@ -107,6 +107,38 @@ export default function App() {
             backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
           }}
         ></div>
+
+        {/* Dark overlay for better snow contrast */}
+        <div className="absolute inset-0 bg-gradient-to-b from-purple-900/20 via-transparent to-purple-900/10"></div>
+
+        {/* Christmas Snow Effect */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none">
+          {[...Array(150)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute animate-snowfall"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `-${Math.random() * 20}%`,
+                animationDelay: `${Math.random() * 10}s`,
+                animationDuration: `${10 + Math.random() * 20}s`,
+                opacity: 0.8 + Math.random() * 0.2,
+              }}
+            >
+              <div
+                className="text-white"
+                style={{
+                  fontSize: `${12 + Math.random() * 16}px`,
+                  textShadow:
+                    "0 0 8px rgba(255, 255, 255, 0.8), 0 0 4px rgba(200, 220, 255, 0.6)",
+                  filter: "drop-shadow(0 0 2px rgba(255, 255, 255, 0.9))",
+                }}
+              >
+                ❄
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Content wrapper with relative positioning to appear above pattern */}

@@ -12,10 +12,10 @@ export interface AnimalRecommendation {
   version2En: string;
   version2Th: string;
   stats: {
-    execution: number;
-    strategy: number;
-    resilience: number;
-    connection: number;
+    actions: number;
+    lessons: number;
+    wellness: number;
+    relationship: number;
   };
 }
 
@@ -70,10 +70,10 @@ export async function getAnimalRecommendation(
       version2En: "string (Archetype Title: Explanation)",
       version2Th: "string (Archetype Title: Explanation)",
       stats: {
-        execution: "number (0-100)",
-        strategy: "number (0-100)",
-        resilience: "number (0-100)",
-        connection: "number (0-100)",
+        actions: "number (0-100) - formerly execution",
+        lessons: "number (0-100) - formerly strategy",
+        wellness: "number (0-100) - formerly resilience",
+        relationship: "number (0-100) - formerly connection",
       },
     },
     null,
@@ -100,7 +100,11 @@ TASK:
 1. Analyze the reflections for personality, achievements, challenges, and teamwork style.
 2. Pick the ONE animal that best fits.
 3. Create 4 output versions. ALL versions must start with the Archetype Title (e.g. "The <Title>: ...").
-4. Assign a score (0-100) for each of these traits: Execution, Strategy, Resilience, Connection.
+4. Assign a score (0-100) for each of these traits based on the following criteria:
+   - Actions: Score based on concrete achievements, output, and "shipping" mentioned in the reflections.
+   - Lessons: Score based on realizations, skills learned, and growth mindset displayed.
+   - Wellness: Score based on mentions of balance, mental health, and how they managed stress/challenges.
+   - Relationship: Score based on mentions of teamwork, gratitude, mentorship, and people-focus.
 
 - Version 1 (English): Focus on their ROLE and IMPACT in the team.
 - Version 1 (Thai): Thai translation of Version 1.
@@ -163,10 +167,10 @@ ${jsonStructure}`;
       version2En: parsedResult.version2En,
       version2Th: parsedResult.version2Th,
       stats: {
-        execution: parsedResult.stats.execution,
-        strategy: parsedResult.stats.strategy,
-        resilience: parsedResult.stats.resilience,
-        connection: parsedResult.stats.connection,
+        actions: parsedResult.stats.actions,
+        lessons: parsedResult.stats.lessons,
+        wellness: parsedResult.stats.wellness,
+        relationship: parsedResult.stats.relationship,
       },
     };
   } catch (error) {

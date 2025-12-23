@@ -228,10 +228,10 @@ export function ExportScreen({
     <div className="py-8 space-y-8 animate-fade-in">
       {/* Header */}
       <div className="max-w-2xl mx-auto text-center space-y-3">
-        <h1 className="text-neutral-900 font-bold text-4xl md:text-5xl font-cooper tracking-tight">
+        <h1 className="font-bold text-4xl md:text-5xl font-cooper tracking-tight bg-gradient-to-r from-purple-700 via-purple-600 to-blue-600 bg-clip-text text-transparent">
           {t("exportScreen.title")}
         </h1>
-        <p className="text-neutral-600 text-lg max-w-lg mx-auto leading-relaxed">
+        <p className="text-neutral-700 text-lg max-w-lg mx-auto leading-relaxed">
           {t("exportScreen.subtitle")}
         </p>
       </div>

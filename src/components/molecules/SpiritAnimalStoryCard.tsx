@@ -46,7 +46,7 @@ export const SpiritAnimalStoryCard = forwardRef<
         padding: "80px",
         display: "flex",
         flexDirection: "column",
-        fontFamily: "system-ui, -apple-system, sans-serif",
+        fontFamily: "'Outfit', sans-serif",
         color: "#0a0a0a",
         position: "relative",
         overflow: "hidden",
@@ -91,7 +91,7 @@ export const SpiritAnimalStoryCard = forwardRef<
             marginBottom: "16px",
           }}
         >
-          {currentDate} Work Personality
+          {currentDate} Your Personality
         </div>
         {userName && (
           <div style={{ fontSize: "36px", color: "#0a0a0a", fontWeight: 500 }}>
@@ -147,7 +147,7 @@ export const SpiritAnimalStoryCard = forwardRef<
           <div
             style={{
               fontSize: "72px",
-              fontFamily: "cooper",
+              fontFamily: "'Fraunces', serif",
               color: "#0a0a0a",
               marginBottom: "24px",
               lineHeight: 1.1,

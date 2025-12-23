@@ -122,11 +122,11 @@
   --container-2xl: 42rem;
 
   /* Typography */
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans: "Outfit", ui-sans-serif, system-ui, sans-serif,
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
     "Liberation Mono", "Courier New", monospace;
-  --font-cooper: "Cooper", serif;
+  --font-cooper: "Fraunces", "Cooper", serif;
   --font-public-sans: "Public Sans", sans-serif;
 
   /* Border radius */
@@ -333,4 +333,18 @@ html {
 
 .animate-fade-in {
   animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Christmas snowfall animation */
+@keyframes snowfall {
+  0% {
+    transform: translateY(0) translateX(0) rotate(0deg);
+  }
+  100% {
+    transform: translateY(100vh) translateX(50px) rotate(360deg);
+  }
+}
+
+.animate-snowfall {
+  animation: snowfall linear infinite;
 }
