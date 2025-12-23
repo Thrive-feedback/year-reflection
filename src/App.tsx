@@ -130,6 +130,7 @@ export default function App() {
         <div className="max-w-2xl mx-auto px-4 pb-12">
           {!isComplete ? (
             <ReflectionWriter
+              key={currentTopicIndex}
               topic={FIXED_TOPICS[currentTopicIndex] || ""}
               initialText={currentText}
               onComplete={handleReflectionComplete}
