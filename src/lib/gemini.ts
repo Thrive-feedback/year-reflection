@@ -53,6 +53,33 @@ export async function getAnimalRecommendation(
     })
     .join("\n\n");
 
+  const config = {
+    temperature: 0.7,
+    responseMimeType: "application/json",
+  };
+
+  const model = "gemini-flash-lite-latest";
+
+  // JSON schema structure for the prompt
+  const jsonStructure = JSON.stringify(
+    {
+      animal: "One of: Capybara, RiverOtter, Owl, Beaver",
+      title: "string",
+      version1En: "string (Archetype Title: Explanation)",
+      version1Th: "string (Archetype Title: Explanation)",
+      version2En: "string (Archetype Title: Explanation)",
+      version2Th: "string (Archetype Title: Explanation)",
+      stats: {
+        execution: "number (0-100)",
+        strategy: "number (0-100)",
+        resilience: "number (0-100)",
+        connection: "number (0-100)",
+      },
+    },
+    null,
+    2
+  );
+
   const prompt = `Based on these year reflections from a person, choose ONE animal from this list that best represents them in an "Office Ecosystem" context: ${ANIMALS.join(
     ", "
   )}.
@@ -73,11 +100,7 @@ TASK:
 1. Analyze the reflections for personality, achievements, challenges, and teamwork style.
 2. Pick the ONE animal that best fits.
 3. Create 4 output versions. ALL versions must start with the Archetype Title (e.g. "The <Title>: ...").
-4. Assign a score (0-100) for each of these traits:
-   - Execution (Getting things done)
-   - Strategy (Planning/Learning)
-   - Resilience (Handling stress)
-   - Connection (People focus)
+4. Assign a score (0-100) for each of these traits: Execution, Strategy, Resilience, Connection.
 
 - Version 1 (English): Focus on their ROLE and IMPACT in the team.
 - Version 1 (Thai): Thai translation of Version 1.
@@ -86,22 +109,9 @@ TASK:
 
 Each explanation should be punchy, cute, and shareable (approx 300-400 characters).
 
-Respond in this EXACT format:
-Animal: [animal name exactly as shown in the list: Capybara, RiverOtter, Owl, or Beaver]
-Stats: [Execution:0-100], [Strategy:0-100], [Resilience:0-100], [Connection:0-100]
-Version1_EN: [Archetype Title]: [Explanation]
-Version1_TH: [Archetype Title in Thai]: [Explanation]
-Version2_EN: [Archetype Title]: [Explanation]
-Version2_TH: [Archetype Title in Thai]: [Explanation]`;
+Respond with a JSON object strictly following this structure:
+${jsonStructure}`;
 
-  const config = {
-    temperature: 0.7,
-    thinkingConfig: {
-      thinkingBudget: 0,
-    },
-  };
-
-  const model = "gemini-flash-lite-latest";
   const contents = [
     {
       role: "user",
@@ -127,46 +137,16 @@ Version2_TH: [Archetype Title in Thai]: [Explanation]`;
       }
     }
 
-    const animalMatch = fullResponse.match(/Animal:\s*(.+?)(?:\n|$)/i);
-    const statsMatch = fullResponse.match(
-      /Stats:\s*\[Execution:(\d+)\],\s*\[Strategy:(\d+)\],\s*\[Resilience:(\d+)\],\s*\[Connection:(\d+)\]/i
-    );
-    const v1EnMatch = fullResponse.match(
-      /Version1_EN:\s*(.+?)(?=\nVersion1_TH:|$)/is
-    );
-    const v1ThMatch = fullResponse.match(
-      /Version1_TH:\s*(.+?)(?=\nVersion2_EN:|$)/is
-    );
-    const v2EnMatch = fullResponse.match(
-      /Version2_EN:\s*(.+?)(?=\nVersion2_TH:|$)/is
-    );
-    const v2ThMatch = fullResponse.match(/Version2_TH:\s*(.+)$/is);
-
-    if (
-      !animalMatch ||
-      !v1EnMatch ||
-      !v1ThMatch ||
-      !v2EnMatch ||
-      !v2ThMatch ||
-      !statsMatch
-    ) {
-      console.error("Gemini response:", fullResponse);
-      throw new Error("Failed to parse Gemini response. Please try again.");
+    let parsedResult: any;
+    try {
+      parsedResult = JSON.parse(fullResponse);
+    } catch (e) {
+      console.error("Failed to parse JSON response:", fullResponse);
+      throw new Error("AI returned invalid JSON.");
     }
 
-    const animalName = animalMatch[1].trim();
-    const stats = {
-      execution: parseInt(statsMatch[1]),
-      strategy: parseInt(statsMatch[2]),
-      resilience: parseInt(statsMatch[3]),
-      connection: parseInt(statsMatch[4]),
-    };
-    let version1En = v1EnMatch[1].trim();
-    let version1Th = v1ThMatch[1].trim();
-    let version2En = v2EnMatch[1].trim();
-    let version2Th = v2ThMatch[1].trim();
-
-    // Find matching animal from the list (case-insensitive)
+    // Validate animal
+    const animalName = parsedResult.animal;
     const animal = ANIMALS.find(
       (a) => a.toLowerCase() === animalName.toLowerCase()
     );
@@ -175,28 +155,19 @@ Version2_TH: [Archetype Title in Thai]: [Explanation]`;
       throw new Error(`Invalid animal selected: ${animalName}`);
     }
 
-    // Extract title from Version1_EN (Assumes "Title: Explanation" format)
-    const titleMatch = version1En.match(/^(.+?):/);
-    const title = titleMatch ? titleMatch[1].trim() : `The ${animal}`;
-
-    // Trim to max 700 chars if too long (allowing some flexibility beyond 600)
-    if (version1En.length > 700)
-      version1En = version1En.substring(0, 697) + "...";
-    if (version1Th.length > 700)
-      version1Th = version1Th.substring(0, 697) + "...";
-    if (version2En.length > 700)
-      version2En = version2En.substring(0, 697) + "...";
-    if (version2Th.length > 700)
-      version2Th = version2Th.substring(0, 697) + "...";
-
     return {
       animal,
-      title,
-      version1En,
-      version1Th,
-      version2En,
-      version2Th,
-      stats,
+      title: parsedResult.title || `The ${animal}`,
+      version1En: parsedResult.version1En,
+      version1Th: parsedResult.version1Th,
+      version2En: parsedResult.version2En,
+      version2Th: parsedResult.version2Th,
+      stats: {
+        execution: parsedResult.stats.execution,
+        strategy: parsedResult.stats.strategy,
+        resilience: parsedResult.stats.resilience,
+        connection: parsedResult.stats.connection,
+      },
     };
   } catch (error) {
     console.error("Gemini API error:", error);
