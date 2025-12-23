@@ -73,22 +73,61 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen font-public-sans relative overflow-hidden">
-      {/* Minimal geometric pattern background */}
-      {/* <div className="absolute inset-0 opacity-40 bg-red-500"></div> */}
+    <div className="min-h-screen font-public-sans relative overflow-hidden bg-neutral-50 selection:bg-purple-200 selection:text-purple-900">
+      {/* Ambient Background */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        {/* Orb 1: Brand Purple (Top Left) */}
+        <div
+          className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-200/40 blur-[100px] animate-pulse"
+          style={{ animationDuration: "4s" }}
+        />
+
+        {/* Orb 2: Soft Blue/Teal (Top Right) */}
+        <div
+          className="absolute top-[-5%] right-[-10%] w-[40%] h-[60%] rounded-full bg-teal-200/30 blur-[120px] animate-pulse"
+          style={{ animationDuration: "7s", animationDelay: "1s" }}
+        />
+
+        {/* Orb 3: Warm Rose/Pink (Bottom Left) */}
+        <div
+          className="absolute bottom-[-10%] left-[10%] w-[45%] h-[45%] rounded-full bg-rose-200/30 blur-[110px] animate-pulse"
+          style={{ animationDuration: "6s", animationDelay: "2s" }}
+        />
+
+        {/* Orb 4: Subtle Yellow (Bottom Right) */}
+        <div
+          className="absolute bottom-[10%] right-[-5%] w-[35%] h-[50%] rounded-full bg-yellow-100/40 blur-[90px] animate-pulse"
+          style={{ animationDuration: "5s", animationDelay: "0.5s" }}
+        />
+
+        {/* Noise overlay texture */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          }}
+        ></div>
+      </div>
 
       {/* Content wrapper with relative positioning to appear above pattern */}
-      <div className="relative z-10">
+      <div className="relative z-10 transition-all duration-500 ease-out">
         {/* Progress Indicator - Show on all steps except export */}
         {!isComplete && (
-          <ProgressIndicator
-            current={currentTopicIndex + 1}
-            max={FIXED_TOPICS.length}
-          />
+          <div className="pt-8 mb-4 max-w-2xl mx-auto px-4">
+            <div className="glass-panel rounded-full px-6 py-3 flex items-center justify-between">
+              <span className="text-sm font-medium text-neutral-500 tracking-wider uppercase">
+                Step {currentTopicIndex + 1} of {FIXED_TOPICS.length}
+              </span>
+              <ProgressIndicator
+                current={currentTopicIndex + 1}
+                max={FIXED_TOPICS.length}
+              />
+            </div>
+          </div>
         )}
 
         {/* Main Content */}
-        <div className="max-w-2xl mx-auto px-4 py-8">
+        <div className="max-w-2xl mx-auto px-4 pb-12">
           {!isComplete ? (
             <ReflectionWriter
               topic={FIXED_TOPICS[currentTopicIndex] || ""}

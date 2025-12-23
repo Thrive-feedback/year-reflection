@@ -225,83 +225,76 @@ export function ExportScreen({
   // };
 
   return (
-    <div className="py-12 space-y-8">
+    <div className="py-8 space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="max-w-2xl mx-auto text-center space-y-4">
-        <div className="flex items-center justify-center gap-2 text-neutral-900">
-          <h1 className="text-neutral-900 font-semibold text-4xl font-cooper">
-            {t("exportScreen.title")}
-          </h1>
-        </div>
-        <p className="text-neutral-600">{t("exportScreen.subtitle")}</p>
+      <div className="max-w-2xl mx-auto text-center space-y-3">
+        <h1 className="text-neutral-900 font-bold text-4xl md:text-5xl font-cooper tracking-tight">
+          {t("exportScreen.title")}
+        </h1>
+        <p className="text-neutral-600 text-lg max-w-lg mx-auto leading-relaxed">
+          {t("exportScreen.subtitle")}
+        </p>
       </div>
 
       {/* Export Mode Toggle */}
       <div className="max-w-2xl mx-auto">
-        <div className="text-neutral-700 font-cooper mb-2">Export Format</div>
-        <div className="flex gap-3">
-          <Button
+        <div className="glass-panel p-1.5 rounded-2xl flex gap-1 relative">
+          <button
             onClick={() => setExportMode("image")}
-            variant="outlined"
-            className={`flex-1 ${
+            className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
               exportMode === "image"
-                ? "border-purple-600 bg-purple-50 text-purple-600"
-                : "border-neutral-200"
+                ? "bg-white text-purple-700 shadow-sm"
+                : "text-neutral-500 hover:bg-white/40 hover:text-neutral-700"
             }`}
           >
             Spirit Animal
-          </Button>
-          <Button
+          </button>
+          <button
             onClick={() => setExportMode("plainText")}
-            variant="outlined"
-            className={`flex-1 ${
+            className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
               exportMode === "plainText"
-                ? "border-purple-600 bg-purple-50 text-purple-600"
-                : "border-neutral-200"
+                ? "bg-white text-purple-700 shadow-sm"
+                : "text-neutral-500 hover:bg-white/40 hover:text-neutral-700"
             }`}
           >
             Plain Text
-          </Button>
+          </button>
         </div>
       </div>
 
       {exportMode === "plainText" ? (
-        <>
-          <div className="max-w-2xl mx-auto space-y-1">
-            <div className="text-neutral-700 font-cooper">
+        <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-8 animate-fade-in">
+          {/* Template Selection */}
+          <div className="space-y-3">
+            <div className="text-xs font-bold text-purple-600 uppercase tracking-widest text-center">
               {t("exportScreen.chooseStyle")}
             </div>
-            <div className="flex gap-3">
-              <Button
-                onClick={() => setTemplate("minimal")}
-                variant="outlined"
-                className={`flex-1 ${
-                  template === "minimal"
-                    ? "border-purple-600 bg-purple-50"
-                    : "border-neutral-200"
-                }`}
-              >
-                {t("exportScreen.minimal")}
-              </Button>
-              <Button
-                onClick={() => setTemplate("bold")}
-                variant="outlined"
-                className={`flex-1 ${
-                  template === "bold"
-                    ? "border-purple-600 bg-purple-50"
-                    : "border-neutral-200"
-                }`}
-              >
-                {t("exportScreen.bold")}
-              </Button>
+            <div className="flex gap-4 justify-center">
+              {[
+                { id: "minimal", label: t("exportScreen.minimal") },
+                { id: "bold", label: t("exportScreen.bold") },
+              ].map((style) => (
+                <button
+                  key={style.id}
+                  onClick={() => setTemplate(style.id as any)}
+                  className={`px-6 py-2 rounded-full border-2 text-sm font-medium transition-all duration-300 ${
+                    template === style.id
+                      ? "border-purple-600 bg-purple-50 text-purple-700"
+                      : "border-neutral-200 text-neutral-500 hover:border-neutral-300 hover:bg-neutral-50"
+                  }`}
+                >
+                  {style.label}
+                </button>
+              ))}
             </div>
           </div>
+
           {/* Preview */}
-          <div className="flex justify-center">
-            <div className="relative">
-              <div className="w-[360px] h-[640px] overflow-hidden rounded-xl shadow-2xl border border-neutral-200">
+          <div className="flex justify-center py-4">
+            <div className="relative group perspective-1000">
+              <div className="w-[300px] h-[533px] overflow-hidden rounded-[2rem] shadow-2xl shadow-purple-900/10 border-[6px] border-white ring-1 ring-neutral-200 bg-neutral-100 transition-transform duration-500 hover:rotate-y-2 hover:scale-[1.02]">
                 <div
-                  className="scale-[0.333] origin-top-left"
+                  className="scale-[0.277] origin-top-left"
                   style={{ width: "1080px", height: "1920px" }}
                 >
                   <StoryPreview
@@ -338,11 +331,11 @@ export function ExportScreen({
           </div>
 
           {/* Action Buttons */}
-          <div className="max-w-2xl mx-auto space-y-3">
+          <div className="space-y-3 pt-2">
             <Button
               onClick={() => handleShare(previewRef, "2025-reflections")}
               iconLeft={<Share2 className="w-5 h-5" />}
-              className="w-full"
+              className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all border-none"
             >
               {t("exportScreen.shareInstagram")}
             </Button>
@@ -351,41 +344,46 @@ export function ExportScreen({
               onClick={() => handleDownload(previewRef, "2025-reflections")}
               variant="outlined"
               iconLeft={<Download className="w-5 h-5" />}
-              className="w-full"
+              className="w-full h-12 border-neutral-200 hover:border-purple-300 hover:bg-purple-50 hover:text-purple-700 transition-colors"
             >
               {t("exportScreen.downloadImage")}
             </Button>
 
-            <div className="flex gap-3 pt-4">
+            <div className="flex gap-4 pt-6 border-t border-neutral-100/50">
               <Button
                 onClick={onBack}
                 variant="text"
                 iconLeft={<ArrowLeft className="w-4 h-4" />}
-                className="flex-1"
+                className="flex-1 text-neutral-500 hover:text-neutral-800"
               >
                 {t("exportScreen.addMore")}
               </Button>
-              <Button onClick={onStartOver} variant="text" className="flex-1">
+              <Button
+                onClick={onStartOver}
+                variant="text"
+                className="flex-1 text-neutral-500 hover:text-red-600 hover:bg-red-50/50"
+              >
                 {t("exportScreen.startOver")}
               </Button>
             </div>
           </div>
 
           {/* Helper Text */}
-          <p className="text-center text-neutral-400 max-w-md mx-auto">
+          <p className="text-center text-neutral-400 text-xs max-w-xs mx-auto">
             {t("exportScreen.tip")}
           </p>
-        </>
+        </div>
       ) : (
         // Image mode - AI Animal Recommendation
-        <div className="max-w-2xl mx-auto space-y-6">
+        <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-8 animate-fade-in">
           <div className="text-center space-y-2">
             <div className="flex items-center justify-center gap-2">
-              <h2 className="text-2xl font-cooper text-neutral-700">
+              <Sparkles className="w-5 h-5 text-yellow-500 animate-pulse" />
+              <h2 className="text-2xl font-cooper text-neutral-800">
                 Discover Your Spirit Animal
               </h2>
             </div>
-            <p className="text-neutral-500">
+            <p className="text-neutral-500 leading-relaxed max-w-md mx-auto">
               Let AI analyze your reflections and tell you which animal
               represents you best
             </p>
@@ -393,8 +391,8 @@ export function ExportScreen({
 
           {/* API Key Input - Only show if not in environment */}
           {!hasEnvApiKey && (
-            <div className="space-y-3">
-              <label className="text-sm font-medium text-neutral-700">
+            <div className="glass-input p-6 rounded-xl space-y-4">
+              <label className="text-sm font-bold text-neutral-700 block">
                 Gemini API Key
               </label>
               <Input
@@ -403,6 +401,7 @@ export function ExportScreen({
                 value={geminiApiKey}
                 onChange={(e) => setGeminiApiKey(e.target.value)}
                 variant="filled"
+                className="bg-white/80 border-transparent focus:bg-white"
               />
               <p className="text-xs text-neutral-500">
                 Get your free API key from{" "}
@@ -410,7 +409,7 @@ export function ExportScreen({
                   href="https://aistudio.google.com/apikey"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-purple-600 hover:underline"
+                  className="text-purple-600 hover:underline font-medium"
                 >
                   Google AI Studio
                 </a>
@@ -420,32 +419,42 @@ export function ExportScreen({
 
           {/* Error Display */}
           {error && (
-            <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
-              <p className="text-sm text-red-600">{error}</p>
+            <div className="p-4 bg-red-50/80 backdrop-blur-sm border border-red-100 rounded-xl animate-shake">
+              <p className="text-sm text-red-600 font-medium text-center">
+                {error}
+              </p>
             </div>
           )}
 
           {/* Generate Button */}
           {!animalResult && (
-            <Button
-              onClick={handleGenerateAnimal}
-              disabled={isGenerating || !geminiApiKey.trim()}
-              iconLeft={<Sparkles className="w-5 h-5" />}
-              className="w-full"
-            >
-              {isGenerating ? "Generating..." : "Generate My Spirit Animal"}
-            </Button>
+            <div className="py-8">
+              <Button
+                onClick={handleGenerateAnimal}
+                disabled={isGenerating || !geminiApiKey.trim()}
+                iconLeft={
+                  isGenerating ? (
+                    <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                  ) : (
+                    <Sparkles className="w-5 h-5" />
+                  )
+                }
+                className="w-full h-14 text-lg bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-xl shadow-purple-500/20 hover:shadow-purple-500/40 hover:-translate-y-0.5 border-none transition-all duration-300"
+              >
+                {isGenerating ? "Analyzing..." : "Reveal My Spirit Animal"}
+              </Button>
+            </div>
           )}
 
           {/* Result Display */}
           {animalResult && (
-            <div className="mt-8 space-y-6">
+            <div className="space-y-8 animate-fade-in">
               {/* Preview of the Card */}
               <div className="flex justify-center">
-                <div className="relative">
-                  <div className="w-[360px] h-[640px] overflow-hidden rounded-xl shadow-2xl border border-neutral-200">
+                <div className="relative group perspective-1000">
+                  <div className="w-[300px] h-[533px] overflow-hidden rounded-[2rem] shadow-2xl shadow-purple-900/10 border-[6px] border-white ring-1 ring-neutral-200 bg-neutral-100 transition-transform duration-500 hover:rotate-y-2 hover:scale-[1.02]">
                     <div
-                      className="scale-[0.333] origin-top-left"
+                      className="scale-[0.277] origin-top-left"
                       style={{ width: "1080px", height: "1920px" }}
                     >
                       <SpiritAnimalStoryCard
@@ -484,65 +493,54 @@ export function ExportScreen({
               </div>
 
               {/* Controls for Version/Lang */}
-              <div className="space-y-4 bg-white p-4 rounded-xl border border-neutral-100 shadow-sm">
-                <div className="flex flex-col gap-4">
+              <div className="space-y-4 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
-                      Version
+                    <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2 text-center">
+                      Content Version
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        onClick={() => setSelectedVersion(1)}
-                        variant="outlined"
-                        className={`flex-1 h-9 ${
-                          selectedVersion === 1
-                            ? "border-purple-600 bg-purple-50 text-purple-600"
-                            : "border-neutral-200 text-neutral-600"
-                        }`}
-                      >
-                        Option 1
-                      </Button>
-                      <Button
-                        onClick={() => setSelectedVersion(2)}
-                        variant="outlined"
-                        className={`flex-1 h-9 ${
-                          selectedVersion === 2
-                            ? "border-purple-600 bg-purple-50 text-purple-600"
-                            : "border-neutral-200 text-neutral-600"
-                        }`}
-                      >
-                        Option 2
-                      </Button>
+                      {[1, 2].map((v) => (
+                        <button
+                          key={v}
+                          onClick={() => setSelectedVersion(v as 1 | 2)}
+                          className={`flex-1 h-9 rounded-lg text-sm font-medium transition-all ${
+                            selectedVersion === v
+                              ? "bg-purple-100 text-purple-700 border border-purple-200"
+                              : "bg-white/50 text-neutral-500 border border-transparent hover:bg-white"
+                          }`}
+                        >
+                          V{v}
+                        </button>
+                      ))}
                     </div>
                   </div>
 
                   <div>
-                    <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+                    <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2 text-center">
                       Language
                     </div>
                     <div className="flex gap-2">
-                      <Button
+                      <button
                         onClick={() => setSelectedLang("en")}
-                        variant="outlined"
-                        className={`flex-1 h-9 ${
+                        className={`flex-1 h-9 rounded-lg text-sm font-medium transition-all ${
                           selectedLang === "en"
-                            ? "border-purple-600 bg-purple-50 text-purple-600"
-                            : "border-neutral-200 text-neutral-600"
+                            ? "bg-purple-100 text-purple-700 border border-purple-200"
+                            : "bg-white/50 text-neutral-500 border border-transparent hover:bg-white"
                         }`}
                       >
-                        En
-                      </Button>
-                      <Button
+                        EN
+                      </button>
+                      <button
                         onClick={() => setSelectedLang("th")}
-                        variant="outlined"
-                        className={`flex-1 h-9 ${
+                        className={`flex-1 h-9 rounded-lg text-sm font-medium transition-all ${
                           selectedLang === "th"
-                            ? "border-purple-600 bg-purple-50 text-purple-600"
-                            : "border-neutral-200 text-neutral-600"
+                            ? "bg-purple-100 text-purple-700 border border-purple-200"
+                            : "bg-white/50 text-neutral-500 border border-transparent hover:bg-white"
                         }`}
                       >
-                        ไทย
-                      </Button>
+                        TH
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -558,7 +556,7 @@ export function ExportScreen({
                     )
                   }
                   iconLeft={<Instagram className="w-5 h-5" />}
-                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 border-none text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+                  className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 border-none text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all"
                 >
                   Share to Story
                 </Button>
@@ -571,19 +569,19 @@ export function ExportScreen({
                   }
                   variant="outlined"
                   iconLeft={<Download className="w-4 h-4" />}
-                  className="w-full"
+                  className="w-full h-12 border-neutral-200 bg-white/50 hover:bg-white hover:border-purple-200 hover:text-purple-700 backdrop-blur-sm"
                 >
                   Download Card as Image
                 </Button>
               </div>
 
-              {/* Plain Text Display (collapsed by default or below) */}
-              <div className="mt-8 pt-8 border-t border-neutral-100">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm font-medium text-neutral-500">
-                    Text Content
+              {/* Plain Text Display */}
+              <div className="mt-8 pt-6 border-t border-neutral-200/50">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
+                    Copy Text
                   </span>
-                  <Button
+                  <button
                     onClick={() =>
                       handleCopyText(
                         selectedLang === "en"
@@ -596,20 +594,22 @@ export function ExportScreen({
                         selectedLang
                       )
                     }
-                    variant="text"
-                    iconLeft={
-                      (selectedLang === "en" ? copiedEn : copiedTh) ? (
-                        <Check className="w-3 h-3" />
-                      ) : (
-                        <Copy className="w-3 h-3" />
-                      )
-                    }
-                    className="text-xs h-8"
+                    className="flex items-center gap-1.5 text-xs font-medium text-purple-600 hover:text-purple-800 transition-colors px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100"
                   >
-                    Copy
-                  </Button>
+                    {(selectedLang === "en" ? copiedEn : copiedTh) ? (
+                      <>
+                        <Check className="w-3 h-3" />
+                        <span>Copied</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3 h-3" />
+                        <span>Copy</span>
+                      </>
+                    )}
+                  </button>
                 </div>
-                <div className="p-4 bg-neutral-50 rounded-lg text-sm text-neutral-600 leading-relaxed">
+                <div className="p-5 bg-white/60 backdrop-blur-sm rounded-xl text-sm text-neutral-600 leading-relaxed border border-white/50 shadow-inner">
                   {selectedLang === "en"
                     ? selectedVersion === 1
                       ? animalResult.version1En
@@ -623,12 +623,12 @@ export function ExportScreen({
           )}
 
           {/* Back Button */}
-          <div className="pt-6">
+          <div className="pt-2 border-t border-neutral-100/50">
             <Button
               onClick={onBack}
               variant="text"
               iconLeft={<ArrowLeft className="w-4 h-4" />}
-              className="w-full"
+              className="w-full text-neutral-500 hover:text-neutral-800"
             >
               Back to Reflections
             </Button>
