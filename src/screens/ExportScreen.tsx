@@ -6,15 +6,16 @@ import {
   Sparkles,
   Copy,
   Check,
+  Instagram,
 } from "lucide-react";
 import type { Reflection } from "../App";
 import { StoryPreview } from "../components/molecules/StoryPreview";
+import { SpiritAnimalStoryCard } from "../components/molecules/SpiritAnimalStoryCard";
 import { Button } from "../components/atoms/Button";
 import { useLanguage } from "../hooks/useLanguage";
 import { Input } from "@/components/atoms/Input";
 import {
   getAnimalRecommendation,
-  getAnimalImage,
   type AnimalRecommendation,
 } from "../lib/gemini";
 
@@ -35,8 +36,9 @@ export function ExportScreen({
     "minimal"
   );
   const [userName, setUserName] = useState("");
-  const [showNameInput, setShowNameInput] = useState(false);
+  // const [showNameInput, setShowNameInput] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
+  const spiritAnimalRef = useRef<HTMLDivElement>(null);
 
   // Gemini AI states
   const [geminiApiKey, setGeminiApiKey] = useState(
@@ -48,7 +50,7 @@ export function ExportScreen({
   );
   const [error, setError] = useState<string>("");
   const [selectedVersion, setSelectedVersion] = useState<1 | 2>(1);
-  // const [selectedLang, setSelectedLang] = useState<"en" | "th">("en");
+  const [selectedLang, setSelectedLang] = useState<"en" | "th">("en");
   const [copiedEn, setCopiedEn] = useState(false);
   const [copiedTh, setCopiedTh] = useState(false);
 
@@ -68,8 +70,11 @@ export function ExportScreen({
     }
   }, []);
 
-  const handleDownload = async () => {
-    if (!previewRef.current) {
+  const handleDownload = async (
+    ref: React.RefObject<HTMLDivElement | null>,
+    filename: string
+  ) => {
+    if (!ref.current) {
       console.error("Preview ref is not available");
       return;
     }
@@ -77,15 +82,15 @@ export function ExportScreen({
     try {
       // @ts-ignore
       const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(previewRef.current, {
+      const canvas = await html2canvas(ref.current, {
         scale: 2,
-        backgroundColor: "#ffffff",
+        backgroundColor: null,
         useCORS: true,
         allowTaint: true,
         logging: false,
         foreignObjectRendering: false,
         onclone: (clonedDoc: Document) => {
-          // Remove all style elements to prevent oklch parsing
+          // Remove all style elements to prevent oklch parsing issues if any
           const styles = clonedDoc.querySelectorAll(
             'style, link[rel="stylesheet"]'
           );
@@ -94,7 +99,7 @@ export function ExportScreen({
       });
 
       const link = document.createElement("a");
-      link.download = `2025-reflections-${Date.now()}.png`;
+      link.download = `${filename}-${Date.now()}.png`;
       link.href = canvas.toDataURL("image/png");
       link.click();
     } catch (error) {
@@ -103,8 +108,11 @@ export function ExportScreen({
     }
   };
 
-  const handleShare = async () => {
-    if (!previewRef.current) {
+  const handleShare = async (
+    ref: React.RefObject<HTMLDivElement | null>,
+    title: string
+  ) => {
+    if (!ref.current) {
       console.error("Preview ref is not available");
       return;
     }
@@ -112,15 +120,14 @@ export function ExportScreen({
     try {
       // @ts-ignore
       const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(previewRef.current, {
+      const canvas = await html2canvas(ref.current, {
         scale: 2,
-        backgroundColor: "#ffffff",
+        backgroundColor: null,
         useCORS: true,
         allowTaint: true,
         logging: false,
         foreignObjectRendering: false,
         onclone: (clonedDoc: Document) => {
-          // Remove all style elements to prevent oklch parsing
           const styles = clonedDoc.querySelectorAll(
             'style, link[rel="stylesheet"]'
           );
@@ -134,7 +141,7 @@ export function ExportScreen({
           return;
         }
 
-        const file = new File([blob], "2025-reflections.png", {
+        const file = new File([blob], `${title}.png`, {
           type: "image/png",
         });
 
@@ -142,27 +149,29 @@ export function ExportScreen({
           try {
             await navigator.share({
               files: [file],
-              title: "2025 Reflections",
-              text: "My reflections for the new year",
+              title: title,
+              text: "My 2025 Year Reflection",
             });
           } catch (error) {
             console.error("Share failed:", error);
           }
         } else {
           // Fallback to download if sharing is not supported
-          handleDownload();
+          const link = document.createElement("a");
+          link.download = `${title}-${Date.now()}.png`;
+          link.href = canvas.toDataURL("image/png");
+          link.click();
         }
       }, "image/png");
     } catch (error) {
       console.error("Failed to share:", error);
-      handleDownload();
+      handleDownload(ref, title);
     }
   };
 
   const handleGenerateAnimal = async () => {
     // Check if result already exists
     if (animalResult) {
-      // Result already generated, just show it
       return;
     }
 
@@ -207,14 +216,13 @@ export function ExportScreen({
     }
   };
 
-  const handleDownloadAnimalImage = () => {
-    if (!animalResult) return;
-
-    const link = document.createElement("a");
-    link.href = getAnimalImage(animalResult.animal);
-    link.download = `${animalResult.animal}-spirit-animal.jpeg`;
-    link.click();
-  };
+  // const handleDownloadAnimalImage = () => {
+  //   if (!animalResult) return;
+  //   const link = document.createElement("a");
+  //   link.href = getAnimalImage(animalResult.animal);
+  //   link.download = `${animalResult.animal}-spirit-animal.jpeg`;
+  //   link.click();
+  // };
 
   return (
     <div className="py-12 space-y-8">
@@ -230,7 +238,7 @@ export function ExportScreen({
 
       {/* Export Mode Toggle */}
       <div className="max-w-2xl mx-auto">
-        <div className="text-neutral-700 font-cooper">Export Format</div>
+        <div className="text-neutral-700 font-cooper mb-2">Export Format</div>
         <div className="flex gap-3">
           <Button
             onClick={() => setExportMode("image")}
@@ -332,7 +340,7 @@ export function ExportScreen({
           {/* Action Buttons */}
           <div className="max-w-2xl mx-auto space-y-3">
             <Button
-              onClick={handleShare}
+              onClick={() => handleShare(previewRef, "2025-reflections")}
               iconLeft={<Share2 className="w-5 h-5" />}
               className="w-full"
             >
@@ -340,7 +348,7 @@ export function ExportScreen({
             </Button>
 
             <Button
-              onClick={handleDownload}
+              onClick={() => handleDownload(previewRef, "2025-reflections")}
               variant="outlined"
               iconLeft={<Download className="w-5 h-5" />}
               className="w-full"
@@ -432,183 +440,183 @@ export function ExportScreen({
           {/* Result Display */}
           {animalResult && (
             <div className="mt-8 space-y-6">
-              <div className="p-6 bg-[#f5f3ef] space-y-4 rounded-2xl">
-                <div className="text-center space-y-3">
-                  <div className="flex justify-center">
-                    <img
-                      src={getAnimalImage(animalResult.animal)}
-                      alt={animalResult.animal}
-                      className="w-64 h-64 object-cover rounded-2xl"
-                    />
-                  </div>
-                  <h3 className="text-3xl font-cooper text-neutral-800">
-                    You are {animalResult.title}!
-                  </h3>
-                  <Button
-                    onClick={handleDownloadAnimalImage}
-                    variant="outlined"
-                    iconLeft={<Download className="w-4 h-4" />}
-                    className="mt-2"
-                  >
-                    Download Image
-                  </Button>
-
-                  {/* Trait Stats */}
-                  {animalResult.stats && (
-                    <div className="grid grid-cols-2 gap-x-6 gap-y-4 pt-4 text-left border-t border-neutral-200 mt-4">
-                      {Object.entries(animalResult.stats).map(
-                        ([key, value]) => (
-                          <div key={key} className="space-y-1">
-                            <div className="flex justify-between text-xs text-neutral-600 font-medium uppercase tracking-wider">
-                              <span>{key}</span>
-                              <span>{value}%</span>
-                            </div>
-                            <div className="h-2 bg-neutral-200 rounded-full overflow-hidden">
-                              <div
-                                className="h-full bg-neutral-800 transition-all duration-1000 ease-out"
-                                style={{
-                                  width: `${value}%`,
-                                }}
-                              />
-                            </div>
-                          </div>
-                        )
-                      )}
+              {/* Preview of the Card */}
+              <div className="flex justify-center">
+                <div className="relative">
+                  <div className="w-[360px] h-[640px] overflow-hidden rounded-xl shadow-2xl border border-neutral-200">
+                    <div
+                      className="scale-[0.333] origin-top-left"
+                      style={{ width: "1080px", height: "1920px" }}
+                    >
+                      <SpiritAnimalStoryCard
+                        animalResult={animalResult}
+                        userName={userName}
+                        lang={selectedLang}
+                        version={selectedVersion}
+                      />
                     </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Version Toggle */}
-              <div className="space-y-2">
-                <div className="text-center text-sm text-neutral-600 font-medium">
-                  Why choose this animal?
-                </div>
-                <div className="flex gap-3 justify-center">
-                  <Button
-                    onClick={() => setSelectedVersion(1)}
-                    variant="outlined"
-                    className={`${
-                      selectedVersion === 1
-                        ? "border-purple-600 bg-purple-50 text-purple-600"
-                        : "border-neutral-200"
-                    }`}
-                  >
-                    Version 1
-                  </Button>
-                  <Button
-                    onClick={() => setSelectedVersion(2)}
-                    variant="outlined"
-                    className={`${
-                      selectedVersion === 2
-                        ? "border-purple-600 bg-purple-50 text-purple-600"
-                        : "border-neutral-200"
-                    }`}
-                  >
-                    Version 2
-                  </Button>
-                </div>
-              </div>
-
-              {/* Language Toggle
-              <div className="space-y-2">
-                <div className="text-center text-sm text-neutral-600 font-medium">
-                  Select Language
-                </div>
-                <div className="flex gap-3 justify-center">
-                  <Button
-                    onClick={() => setSelectedLang("en")}
-                    variant="outlined"
-                    className={`${
-                      selectedLang === "en"
-                        ? "border-purple-600 bg-purple-50 text-purple-600"
-                        : "border-neutral-200"
-                    }`}
-                  >
-                    English
-                  </Button>
-                  <Button
-                    onClick={() => setSelectedLang("th")}
-                    variant="outlined"
-                    className={`${
-                      selectedLang === "th"
-                        ? "border-purple-600 bg-purple-50 text-purple-600"
-                        : "border-neutral-200"
-                    }`}
-                  >
-                    ไทย (Thai)
-                  </Button>
-                </div>
-              </div> */}
-
-              {/* Description Display */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-neutral-600">
-                    English
                   </div>
+                </div>
+              </div>
+
+              {/* Hidden Spirit Animal Card for Capture */}
+              <div
+                style={{
+                  position: "fixed",
+                  left: "-9999px",
+                  top: "-9999px",
+                  fontFamily: "system-ui, -apple-system, sans-serif",
+                  color: "#000000",
+                  backgroundColor: "#f5f3ef",
+                  // Reset all CSS variables to prevent oklch inheritance
+                  borderColor: "#e5e5e5",
+                  outlineColor: "#a3a3a3",
+                  isolation: "isolate",
+                }}
+              >
+                <SpiritAnimalStoryCard
+                  ref={spiritAnimalRef}
+                  animalResult={animalResult}
+                  userName={userName}
+                  lang={selectedLang}
+                  version={selectedVersion}
+                />
+              </div>
+
+              {/* Controls for Version/Lang */}
+              <div className="space-y-4 bg-white p-4 rounded-xl border border-neutral-100 shadow-sm">
+                <div className="flex flex-col gap-4">
+                  <div>
+                    <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+                      Version
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => setSelectedVersion(1)}
+                        variant="outlined"
+                        className={`flex-1 h-9 ${
+                          selectedVersion === 1
+                            ? "border-purple-600 bg-purple-50 text-purple-600"
+                            : "border-neutral-200 text-neutral-600"
+                        }`}
+                      >
+                        Option 1
+                      </Button>
+                      <Button
+                        onClick={() => setSelectedVersion(2)}
+                        variant="outlined"
+                        className={`flex-1 h-9 ${
+                          selectedVersion === 2
+                            ? "border-purple-600 bg-purple-50 text-purple-600"
+                            : "border-neutral-200 text-neutral-600"
+                        }`}
+                      >
+                        Option 2
+                      </Button>
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="text-xs font-semibold text-neutral-400 uppercase tracking-wider mb-2">
+                      Language
+                    </div>
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => setSelectedLang("en")}
+                        variant="outlined"
+                        className={`flex-1 h-9 ${
+                          selectedLang === "en"
+                            ? "border-purple-600 bg-purple-50 text-purple-600"
+                            : "border-neutral-200 text-neutral-600"
+                        }`}
+                      >
+                        En
+                      </Button>
+                      <Button
+                        onClick={() => setSelectedLang("th")}
+                        variant="outlined"
+                        className={`flex-1 h-9 ${
+                          selectedLang === "th"
+                            ? "border-purple-600 bg-purple-50 text-purple-600"
+                            : "border-neutral-200 text-neutral-600"
+                        }`}
+                      >
+                        ไทย
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Share/Download Actions */}
+              <div className="space-y-3">
+                <Button
+                  onClick={() =>
+                    handleShare(
+                      spiritAnimalRef,
+                      `my-spirit-animal-${animalResult.animal}`
+                    )
+                  }
+                  iconLeft={<Instagram className="w-5 h-5" />}
+                  className="w-full bg-gradient-to-r from-purple-600 to-pink-600 border-none text-white shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all"
+                >
+                  Share to Story
+                </Button>
+                <Button
+                  onClick={() =>
+                    handleDownload(
+                      spiritAnimalRef,
+                      `my-spirit-animal-${animalResult.animal}`
+                    )
+                  }
+                  variant="outlined"
+                  iconLeft={<Download className="w-4 h-4" />}
+                  className="w-full"
+                >
+                  Download Card as Image
+                </Button>
+              </div>
+
+              {/* Plain Text Display (collapsed by default or below) */}
+              <div className="mt-8 pt-8 border-t border-neutral-100">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-sm font-medium text-neutral-500">
+                    Text Content
+                  </span>
                   <Button
                     onClick={() =>
                       handleCopyText(
-                        selectedVersion === 1
-                          ? animalResult.version1En
-                          : animalResult.version2En,
-                        "en"
-                      )
-                    }
-                    variant="text"
-                    iconLeft={
-                      copiedEn ? (
-                        <Check className="w-4 h-4" />
-                      ) : (
-                        <Copy className="w-4 h-4" />
-                      )
-                    }
-                    className="text-sm"
-                  >
-                    {copiedEn ? "Copied!" : "Copy"}
-                  </Button>
-                </div>
-                <div className="max-w-2xl mx-auto p-6 bg-white border border-neutral-200">
-                  <p className="text-neutral-700 leading-relaxed text-lg whitespace-pre-wrap">
-                    {selectedVersion === 1 && animalResult.version1En}
-                    {selectedVersion === 2 && animalResult.version2En}
-                  </p>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-neutral-600">
-                    Thai
-                  </div>
-                  <Button
-                    onClick={() =>
-                      handleCopyText(
-                        selectedVersion === 1
+                        selectedLang === "en"
+                          ? selectedVersion === 1
+                            ? animalResult.version1En
+                            : animalResult.version2En
+                          : selectedVersion === 1
                           ? animalResult.version1Th
                           : animalResult.version2Th,
-                        "th"
+                        selectedLang
                       )
                     }
                     variant="text"
                     iconLeft={
-                      copiedTh ? (
-                        <Check className="w-4 h-4" />
+                      (selectedLang === "en" ? copiedEn : copiedTh) ? (
+                        <Check className="w-3 h-3" />
                       ) : (
-                        <Copy className="w-4 h-4" />
+                        <Copy className="w-3 h-3" />
                       )
                     }
-                    className="text-sm"
+                    className="text-xs h-8"
                   >
-                    {copiedTh ? "Copied!" : "Copy"}
+                    Copy
                   </Button>
                 </div>
-                <div className="max-w-2xl mx-auto p-6 bg-white border border-neutral-200">
-                  <p className="text-neutral-700 leading-relaxed text-lg whitespace-pre-wrap">
-                    {selectedVersion === 1 && animalResult.version1Th}
-                    {selectedVersion === 2 && animalResult.version2Th}
-                  </p>
+                <div className="p-4 bg-neutral-50 rounded-lg text-sm text-neutral-600 leading-relaxed">
+                  {selectedLang === "en"
+                    ? selectedVersion === 1
+                      ? animalResult.version1En
+                      : animalResult.version2En
+                    : selectedVersion === 1
+                    ? animalResult.version1Th
+                    : animalResult.version2Th}
                 </div>
               </div>
             </div>
