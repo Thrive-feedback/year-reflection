@@ -623,7 +623,7 @@ export function ExportScreen({
           )}
 
           {/* Back Button */}
-          <div className="pt-2 border-t border-neutral-100/50">
+          {/* <div className="pt-2 border-t border-neutral-100/50">
             <Button
               onClick={onBack}
               variant="text"
@@ -632,7 +632,7 @@ export function ExportScreen({
             >
               Back to Reflections
             </Button>
-          </div>
+          </div> */}
         </div>
       )}
     </div>
