@@ -126,16 +126,13 @@ export default function App() {
               }}
             >
               <div
-                className="text-white"
+                className="bg-white rounded-full shadow-[0_0_12px_rgba(255,255,255,0.8)]"
                 style={{
-                  fontSize: `${12 + Math.random() * 16}px`,
-                  textShadow:
-                    "0 0 8px rgba(255, 255, 255, 0.8), 0 0 4px rgba(200, 220, 255, 0.6)",
-                  filter: "drop-shadow(0 0 2px rgba(255, 255, 255, 0.9))",
+                  width: `${6 + Math.random() * 6}px`,
+                  height: `${6 + Math.random() * 6}px`,
+                  filter: "blur(0.5px)",
                 }}
-              >
-                ❄
-              </div>
+              />
             </div>
           ))}
         </div>

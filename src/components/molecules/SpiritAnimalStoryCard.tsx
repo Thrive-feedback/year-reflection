@@ -154,23 +154,22 @@ export const SpiritAnimalStoryCard = forwardRef<
         }}
       />
 
-      {/* Decorative Snowflakes */}
-      {[...Array(24)].map((_, i) => (
+      {/* Decorative Snow Dots */}
+      {[...Array(32)].map((_, i) => (
         <div
           key={i}
           style={{
             position: "absolute",
             left: `${Math.random() * 100}%`,
             top: `${Math.random() * 100}%`,
-            fontSize: `${24 + Math.random() * 32}px`,
-            color: "rgba(0, 0, 0, 0.04)",
-            transform: `rotate(${Math.random() * 360}deg)`,
+            width: `${12 + Math.random() * 16}px`,
+            height: `${12 + Math.random() * 16}px`,
+            backgroundColor: "rgba(0, 0, 0, 0.025)",
+            borderRadius: "50%",
             pointerEvents: "none",
-            fontFamily: "serif",
+            filter: "blur(1px)",
           }}
-        >
-          ❄
-        </div>
+        />
       ))}
 
       {/* Festive Stars */}
