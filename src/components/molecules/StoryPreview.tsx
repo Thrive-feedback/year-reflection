@@ -38,7 +38,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                 fontSize: "90px",
                 marginBottom: "24px",
                 color: "#0a0a0a",
-                fontFamily: "cooper"
+                fontFamily: "cooper",
               }}
             >
               2025

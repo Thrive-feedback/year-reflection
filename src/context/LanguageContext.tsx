@@ -1,8 +1,8 @@
-import React, { createContext, useState, useEffect } from 'react';
-import enTranslations from '../locales/en.json';
-import thTranslations from '../locales/th.json';
+import React, { createContext, useState, useEffect } from "react";
+import enTranslations from "../locales/en.json";
+import thTranslations from "../locales/th.json";
 
-type Language = 'en' | 'th';
+type Language = "en" | "th";
 type Translations = typeof enTranslations;
 
 interface LanguageContextType {
@@ -11,7 +11,9 @@ interface LanguageContextType {
   t: (key: string) => string;
 }
 
-export const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+export const LanguageContext = createContext<LanguageContextType | undefined>(
+  undefined
+);
 
 const translations: Record<Language, Translations> = {
   en: enTranslations,
@@ -20,7 +22,7 @@ const translations: Record<Language, Translations> = {
 
 // Nested object getter function
 function getNestedValue(obj: any, path: string): string {
-  const keys = path.split('.');
+  const keys = path.split(".");
   let value = obj;
   for (const key of keys) {
     value = value[key];
@@ -38,16 +40,16 @@ interface LanguageProviderProps {
 export function LanguageProvider({ children }: LanguageProviderProps) {
   const [language, setLanguageState] = useState<Language>(() => {
     // Check localStorage first
-    const stored = localStorage.getItem('language');
-    if (stored === 'en' || stored === 'th') {
+    const stored = localStorage.getItem("language");
+    if (stored === "en" || stored === "th") {
       return stored;
     }
     // Default to English
-    return 'en';
+    return "en";
   });
 
   useEffect(() => {
-    localStorage.setItem('language', language);
+    localStorage.setItem("language", language);
   }, [language]);
 
   const setLanguage = (lang: Language) => {
