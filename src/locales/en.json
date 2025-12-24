@@ -17,21 +17,21 @@
     "finishCreateSummary": "Finish & Create Summary",
     "selectToBegin": "Select a topic to begin your reflection",
     "topics": [
-      "What I'm proud of achieving",
-      "My biggest challenge and what I learned",
-      "Relationships that matter most to me",
-      "What I'm leaving behind 2024"
+      "What I'm proud of achieving.",
+      "My biggest challenge and what I learned.",
+      "Relationships that matter most to me.",
+      "What I'm leaving behind 2024."
     ]
   },
   "reflectionWriter": {
     "title": "Reflecting on",
-    "step1": "Step 1. Reflecting on",
+    "step1": "Reflecting on",
     "startWriting": "Start writing your reflection",
     "keepGoing": "Keep going...",
     "lookingGood": "Looking good!",
     "charsLeft": "characters left",
     "maxReached": "Maximum length reached",
-    "selectNext": "Select next topic",
+    "selectNext": "Go to next topic",
     "placeholders": [
       "Share your thoughts...",
       "What comes to mind?",

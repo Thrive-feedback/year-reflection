@@ -5,6 +5,7 @@ import { Button } from "@/components/atoms/Button";
 import { useLanguage } from "@/hooks/useLanguage";
 
 interface ReflectionWriterProps {
+  currentTopicIndex: number;
   topic: string;
   initialText: string;
   onComplete: (text: string) => void;
@@ -14,6 +15,7 @@ interface ReflectionWriterProps {
 const MAX_CHARACTERS = 120;
 
 export function ReflectionWriter({
+  currentTopicIndex,
   topic,
   initialText,
   onComplete,
@@ -37,16 +39,18 @@ export function ReflectionWriter({
   return (
     <div className="flex flex-col">
       {/* Back Button */}
-      <div className="flex justify-start w-full mb-6">
-        <Button
-          onClick={onBack}
-          variant="text"
-          iconLeft={<ArrowLeft className="w-5 h-5" />}
-          className="justify-start w-fit text-neutral-600 hover:text-neutral-900 transition-colors"
-        >
-          Back
-        </Button>
-      </div>
+      {currentTopicIndex !== 0 && (
+        <div className="flex justify-start w-full mb-6">
+          <Button
+            onClick={onBack}
+            variant="text"
+            iconLeft={<ArrowLeft className="w-5 h-5" />}
+            className="justify-start w-fit text-neutral-600 hover:text-neutral-900 transition-colors"
+          >
+            Back
+          </Button>
+        </div>
+      )}
 
       <div className="glass-panel rounded-3xl p-8 mb-8 animate-fade-in relative overflow-hidden">
         {/* Decorative highlight */}

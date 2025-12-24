@@ -237,7 +237,7 @@ export const SpiritAnimalStoryCard = forwardRef<
           zIndex: 1,
         }}
       >
-        floatnarue / year-reflection
+        Thrive
       </div>
     </div>
   );

@@ -163,6 +163,7 @@ export default function App() {
           {!isComplete ? (
             <ReflectionWriter
               key={currentTopicIndex}
+              currentTopicIndex={currentTopicIndex}
               topic={FIXED_TOPICS[currentTopicIndex] || ""}
               initialText={currentText}
               onComplete={handleReflectionComplete}

@@ -23,7 +23,7 @@ const TextAreaInputVariants = cva(
   {
     variants: {
       variant: {
-        outlined: "bg-white border-[rgba(0,0,0,0.12)] focus-visible:border-purple-600 focus-visible:ring-[3px] focus-visible:ring-purple-400/50",
+        outlined: "bg-white border-[rgba(0,0,0,0.12)] visible:border-purple-600 focus-visible:ring-[3px] focus-visible:ring-purple-400/50",
         filled: "border-transparent bg-[rgba(0,0,0,0.06)] focus-visible:bg-[rgba(0,0,0,0.09)] focus-visible:ring-[3px] focus-visible:ring-purple-400/50",
       },
       hasError: {

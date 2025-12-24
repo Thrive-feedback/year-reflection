@@ -9,7 +9,6 @@ export function ProgressIndicator({ current, max }: ProgressIndicatorProps) {
   return (
     <div className="sticky top-4 z-50 px-4">
       <div className="max-w-2xl mx-auto">
-        <div className="glass-panel rounded-2xl px-6 py-4 shadow-lg">
           <div className="flex items-center justify-between mb-3 gap-2">
             <span className="text-sm font-medium bg-gradient-to-r from-purple-700 to-blue-600 bg-clip-text text-transparent">
               Your Reflections
@@ -24,7 +23,6 @@ export function ProgressIndicator({ current, max }: ProgressIndicatorProps) {
               style={{ width: `${(current / max) * 100}%` }}
             />
           </div>
-        </div>
       </div>
     </div>
   );
