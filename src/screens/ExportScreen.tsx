@@ -50,7 +50,7 @@ export function ExportScreen({
   );
   const [error, setError] = useState<string>("");
   const [selectedVersion, setSelectedVersion] = useState<1 | 2>(1);
-  const [selectedLang, setSelectedLang] = useState<"en" | "th">("en");
+  const [selectedLang, setSelectedLang] = useState<"en" | "th">("th");
   const [copiedEn, setCopiedEn] = useState(false);
   const [copiedTh, setCopiedTh] = useState(false);
 
@@ -237,7 +237,7 @@ export function ExportScreen({
       </div>
 
       {/* Export Mode Toggle */}
-      <div className="max-w-2xl mx-auto">
+      {/* <div className="max-w-2xl mx-auto">
         <div className="glass-panel p-1.5 rounded-2xl flex gap-1 relative">
           <button
             onClick={() => setExportMode("image")}
@@ -260,7 +260,7 @@ export function ExportScreen({
             Plain Text
           </button>
         </div>
-      </div>
+      </div> */}
 
       {exportMode === "plainText" ? (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-8 animate-fade-in">
@@ -488,28 +488,7 @@ export function ExportScreen({
 
               {/* Controls for Version/Lang */}
               <div className="space-y-4 bg-white/50 backdrop-blur-sm p-4 rounded-2xl border border-white/60">
-                <div className="grid grid-cols-2 gap-4">
-                  <div>
-                    <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2 text-center">
-                      Content Version
-                    </div>
-                    <div className="flex gap-2">
-                      {[1, 2].map((v) => (
-                        <button
-                          key={v}
-                          onClick={() => setSelectedVersion(v as 1 | 2)}
-                          className={`flex-1 h-9 rounded-lg text-sm font-medium transition-all ${
-                            selectedVersion === v
-                              ? "bg-purple-100 text-purple-700 border border-purple-200"
-                              : "bg-white/50 text-neutral-500 border border-transparent hover:bg-white"
-                          }`}
-                        >
-                          V{v}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
+                <div className="gap-4">
                   <div>
                     <div className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest mb-2 text-center">
                       Language
@@ -570,7 +549,7 @@ export function ExportScreen({
               </div>
 
               {/* Plain Text Display */}
-              <div className="mt-8 pt-6 border-t border-neutral-200/50">
+              {/* <div className="mt-8 pt-6 border-t border-neutral-200/50">
                 <div className="flex items-center justify-between mb-3">
                   <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
                     Copy Text
@@ -612,7 +591,7 @@ export function ExportScreen({
                     ? animalResult.version1Th
                     : animalResult.version2Th}
                 </div>
-              </div>
+              </div> */}
             </div>
           )}
 
