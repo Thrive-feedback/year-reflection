@@ -269,7 +269,7 @@ export function ExportScreen({
             <div className="text-xs font-bold text-purple-600 uppercase tracking-widest text-center">
               {t("exportScreen.chooseStyle")}
             </div>
-            <div className="flex gap-4 justify-center">
+            <div className="flex gap-2 justify-center">
               {[
                 { id: "minimal", label: t("exportScreen.minimal") },
                 { id: "bold", label: t("exportScreen.bold") },
@@ -334,7 +334,7 @@ export function ExportScreen({
           <div className="space-y-3 pt-2">
             <Button
               onClick={() => handleShare(previewRef, "2025-reflections")}
-              iconLeft={<Share2 className="w-5 h-5" />}
+              iconLeft={<Instagram className="w-5 h-5" />}
               className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all border-none"
             >
               {t("exportScreen.shareInstagram")}
@@ -348,7 +348,7 @@ export function ExportScreen({
             >
               {t("exportScreen.downloadImage")}
             </Button>
-
+{/* 
             <div className="flex gap-4 pt-6 border-t border-neutral-100/50">
               <Button
                 onClick={onBack}
@@ -365,20 +365,14 @@ export function ExportScreen({
               >
                 {t("exportScreen.startOver")}
               </Button>
-            </div>
+            </div> */}
           </div>
-
-          {/* Helper Text */}
-          <p className="text-center text-neutral-400 text-xs max-w-xs mx-auto">
-            {t("exportScreen.tip")}
-          </p>
         </div>
       ) : (
         // Image mode - AI Animal Recommendation
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-8 animate-fade-in">
           <div className="text-center space-y-2">
             <div className="flex items-center justify-center gap-2">
-              <Sparkles className="w-5 h-5 text-yellow-500 animate-pulse" />
               <h2 className="text-2xl font-cooper text-neutral-800">
                 Discover Your Spirit Animal
               </h2>
@@ -558,7 +552,7 @@ export function ExportScreen({
                   iconLeft={<Instagram className="w-5 h-5" />}
                   className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 border-none text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all"
                 >
-                  Share to Story
+                  Share to Instagram
                 </Button>
                 <Button
                   onClick={() =>

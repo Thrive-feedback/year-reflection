@@ -95,28 +95,6 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                 >
                   {reflection.text}
                 </div>
-                <div
-                  style={{ display: "flex", alignItems: "center", gap: "16px" }}
-                >
-                  <div style={{ fontSize: "28px", color: "#0a0a0a" }}>
-                    {reflection.rating}/10
-                  </div>
-                  <div style={{ display: "flex", gap: "8px" }}>
-                    {Array.from({
-                      length: Math.min(reflection.rating, 10),
-                    }).map((_, i) => (
-                      <div
-                        key={i}
-                        style={{
-                          width: "16px",
-                          height: "16px",
-                          backgroundColor: "#0a0a0a",
-                          borderRadius: "50%",
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
               </div>
             ))}
           </div>
@@ -130,7 +108,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
               marginTop: "64px",
             }}
           >
-            {currentDate}
+            Thrive
           </div>
         </div>
       );
@@ -284,7 +262,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
         style={{
           width: "1080px",
           height: "1920px",
-          backgroundColor: "#171717",
+          backgroundColor: "#110926",
           color: "#ffffff",
           padding: "80px",
           display: "flex",
@@ -355,7 +333,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                   </div>
                 </div>
               </div>
-              <div
+              {/* <div
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -384,7 +362,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
                     }}
                   />
                 </div>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>
@@ -399,7 +377,7 @@ export const StoryPreview = forwardRef<HTMLDivElement, StoryPreviewProps>(
             letterSpacing: "0.05em",
           }}
         >
-          {currentDate}
+          Thrive
         </div>
       </div>
     );
