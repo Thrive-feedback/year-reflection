@@ -594,6 +594,14 @@ export function ExportScreen({
                 >
                   {isExporting ? "Preparing image..." : "Share to Instagram"}
                 </Button>
+                <Button
+                  onClick={onStartOver}
+                  disabled={isExporting}
+                  variant="text"
+                  className="w-full text-neutral-400 hover:text-neutral-600 font-medium text-xs tracking-widest uppercase py-4"
+                >
+                  Reflect Again (Reset All)
+                </Button>
                 {/* <Button
                   onClick={() =>
                     handleDownload(
