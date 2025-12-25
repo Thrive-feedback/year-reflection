@@ -12,7 +12,7 @@ interface ReflectionWriterProps {
   onBack: () => void;
 }
 
-const MAX_CHARACTERS = 120;
+const MAX_CHARACTERS = 150;
 
 export function ReflectionWriter({
   currentTopicIndex,

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ReflectionWriter } from "./screens/ReflectionWriter";
 import { ExportScreen } from "./screens/ExportScreen";
+import { IntroScreen } from "./screens/IntroScreen";
 import { ProgressIndicator } from "./components/atoms/ProgressIndicator";
 import { useLanguage } from "./hooks/useLanguage";
 
@@ -14,6 +15,7 @@ export default function App() {
   const { t } = useLanguage();
   const [reflections, setReflections] = useState<Reflection[]>([]);
   const [currentText, setCurrentText] = useState<string>("");
+  const [hasStarted, setHasStarted] = useState(false);
 
   // Load saved reflections from localStorage
   useEffect(() => {
@@ -39,6 +41,7 @@ export default function App() {
   const FIXED_TOPICS = t("topicSelection.topics") as unknown as string[];
   const currentTopicIndex = reflections.length;
   const isComplete = currentTopicIndex >= FIXED_TOPICS.length;
+  const shouldShowIntro = !hasStarted && reflections.length === 0;
 
   const handleReflectionComplete = (text: string) => {
     const newReflection: Reflection = {
@@ -140,8 +143,8 @@ export default function App() {
 
       {/* Content wrapper with relative positioning to appear above pattern */}
       <div className="relative z-10 transition-all duration-500 ease-out">
-        {/* Progress Indicator - Show on all steps except export */}
-        {!isComplete && (
+        {/* Progress Indicator - Show on all steps except export & intro */}
+        {!isComplete && !shouldShowIntro && (
           <div className="pt-8 mb-4 max-w-2xl mx-auto px-4">
             <div className="glass-panel rounded-full px-6 py-3 flex items-center justify-between">
               <span className="text-sm font-medium text-neutral-500 tracking-wider uppercase">
@@ -157,7 +160,9 @@ export default function App() {
 
         {/* Main Content */}
         <div className="max-w-2xl mx-auto px-4 pb-12">
-          {!isComplete ? (
+          {shouldShowIntro ? (
+            <IntroScreen onStart={() => setHasStarted(true)} />
+          ) : !isComplete ? (
             <ReflectionWriter
               key={currentTopicIndex}
               currentTopicIndex={currentTopicIndex}
@@ -175,6 +180,17 @@ export default function App() {
           )}
         </div>
       </div>
+
+      {/* Global Brand Footer */}
+      <footer
+        className="relative z-10 pb-8 text-center animate-fade-in"
+        style={{ animationDelay: "1s" }}
+      >
+        <p className="text-xs font-semibold text-neutral-400 tracking-wider uppercase">
+          Created with ❤️ by{" "}
+          <span className="text-neutral-500">thrive.team</span>
+        </p>
+      </footer>
     </div>
   );
 }

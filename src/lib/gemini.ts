@@ -111,7 +111,7 @@ TASK:
 - Version 2 (English): Focus on their PERSONALITY and VIBE.
 - Version 2 (Thai): Thai translation of Version 2.
 
-Each explanation should be punchy, cute, and shareable (approx 300-400 characters).
+Each explanation should be punchy, cute, funny and shareable (approx 300-400 characters).
 
 Respond with a JSON object strictly following this structure:
 ${jsonStructure}`;

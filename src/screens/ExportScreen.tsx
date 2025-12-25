@@ -58,21 +58,47 @@ export function ExportScreen({
   const hasEnvApiKey = !!import.meta.env.VITE_GEMINI_API_KEY;
   const STORAGE_KEY = "spirit-animal-result";
 
+  // Helper function to convert image to Data URL for absolute reliability
+  const convertImagesToDataUrls = async (element: HTMLElement) => {
+    const images = Array.from(element.getElementsByTagName("img"));
+    const promises = images.map(async (img) => {
+      try {
+        // If it's already a data URL, skip
+        if (img.src.startsWith("data:")) return;
+
+        // Fetch image and convert to blob then to data URL
+        const response = await fetch(img.src);
+        const blob = await response.blob();
+        return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            img.src = reader.result as string;
+            resolve(null);
+          };
+          reader.readAsDataURL(blob);
+        });
+      } catch (err) {
+        console.error("Failed to convert image to Data URL:", img.src, err);
+      }
+    });
+    await Promise.all(promises);
+  };
+
   // Helper function to wait for all images to load
   const waitForImages = async (element: HTMLElement) => {
     const images = Array.from(element.getElementsByTagName("img"));
     const promises = images.map((img) => {
-      if (img.complete) return Promise.resolve();
-      return new Promise((resolve, reject) => {
+      if (img.complete && img.naturalHeight !== 0) return Promise.resolve();
+      return new Promise((resolve) => {
         img.onload = resolve;
-        img.onerror = reject;
-        // Also check if it's already complete in case of race condition
-        setTimeout(() => resolve(null), 2000); // 2s timeout fallback
+        img.onerror = resolve; // Continue on error
+        // 5s timeout fallback for large images
+        setTimeout(() => resolve(null), 5000);
       });
     });
     await Promise.all(promises);
-    // Extra small buffer for layout/styles to settle
-    await new Promise((resolve) => setTimeout(resolve, 150));
+    // Extra buffer for rendering
+    await new Promise((resolve) => setTimeout(resolve, 300));
   };
 
   // Load saved result from localStorage on mount
@@ -101,12 +127,14 @@ export function ExportScreen({
     try {
       if (ref.current) {
         await waitForImages(ref.current);
+        await convertImagesToDataUrls(ref.current);
       }
       const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(ref.current, {
         quality: 1,
         pixelRatio: 2,
         backgroundColor: "#fafafa",
+        cacheBust: true,
       });
 
       const link = document.createElement("a");
@@ -134,12 +162,14 @@ export function ExportScreen({
     try {
       if (ref.current) {
         await waitForImages(ref.current);
+        await convertImagesToDataUrls(ref.current);
       }
       const { toBlob } = await import("html-to-image");
       const blob = await toBlob(ref.current, {
         quality: 1,
         pixelRatio: 2,
         backgroundColor: "#fafafa",
+        cacheBust: true,
       });
 
       if (!blob) {
