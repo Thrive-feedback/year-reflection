@@ -511,7 +511,7 @@ export function ExportScreen({
                 >
                   Share to Instagram
                 </Button>
-                <Button
+                {/* <Button
                   onClick={() =>
                     handleDownload(
                       spiritAnimalRef,
@@ -523,7 +523,7 @@ export function ExportScreen({
                   className="w-full h-12 border-neutral-200 bg-white/50 hover:bg-white hover:border-purple-200 hover:text-purple-700 backdrop-blur-sm"
                 >
                   Download Card as Image
-                </Button>
+                </Button> */}
               </div>
 
               {/* Plain Text Display */}

@@ -442,6 +442,12 @@ export const SpiritAnimalStoryCard = forwardRef<
         }}
       >
         Season's Reflections • Thrive
+        <br/>
+        <span style={{
+          color: "#afafaf",
+        }}>
+          https://year-reflection.vercel.app
+        </span>
       </div>
     </div>
   );
