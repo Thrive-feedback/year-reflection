@@ -101,7 +101,7 @@ export const SpiritAnimalStoryCard = forwardRef<
           left: "-10%",
           width: "60%",
           height: "40%",
-          borderRadius: "50%",
+          borderRadius: "20%",
           backgroundColor: "rgba(168, 85, 247, 0.15)", // Purple
           filter: "blur(120px)",
         }}
@@ -280,11 +280,12 @@ export const SpiritAnimalStoryCard = forwardRef<
           <img
             src={getAnimalImage(animalResult.animal)}
             alt={animalResult.animal}
+            crossOrigin="anonymous"
             style={{
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              borderRadius: "50%", // Circular for more "avatar/spiritual" look
+              borderRadius: "20%", // Circular for more "avatar/spiritual" look
               boxShadow: "0 32px 64px -16px rgba(168, 85, 247, 0.25)",
               border: "12px solid white",
               position: "relative",
@@ -440,7 +441,7 @@ export const SpiritAnimalStoryCard = forwardRef<
           letterSpacing: "0.05em",
         }}
       >
-        ❄ Season's Reflections • Thrive ❄
+        Season's Reflections • Thrive
       </div>
     </div>
   );
