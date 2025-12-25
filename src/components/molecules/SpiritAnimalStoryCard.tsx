@@ -221,10 +221,10 @@ export const SpiritAnimalStoryCard = forwardRef<
       <div style={{ textAlign: "center", marginBottom: "64px", zIndex: 1 }}>
         <div
           style={{
-            fontSize: "32px",
+            fontSize: "35px",
             textTransform: "uppercase",
-            letterSpacing: "0.2em",
-            color: "#737373",
+            letterSpacing: "0.1em",
+            color: "#5d5d5d",
             marginBottom: "16px",
             display: "flex",
             alignItems: "center",
@@ -232,7 +232,7 @@ export const SpiritAnimalStoryCard = forwardRef<
             gap: "12px",
           }}
         >
-          <span>✨</span> {currentDate} Your Personality <span>✨</span>
+          {currentDate} Your Personality
         </div>
         {userName && (
           <div
@@ -430,6 +430,11 @@ export const SpiritAnimalStoryCard = forwardRef<
       </div>
 
       {/* Footer */}
+      {/* <img
+        src="/images/qrcode.png"
+        alt="QR Code"
+        className="w-20 h-20 opacity-60 hover:opacity-100 transition-opacity"
+      />
       <div
         style={{
           marginTop: "64px",
@@ -442,13 +447,62 @@ export const SpiritAnimalStoryCard = forwardRef<
         }}
       >
         Season's Reflections • Thrive
-        <br/>
-        <span style={{
-          color: "#afafaf",
-        }}>
+        <br />
+        <span
+          style={{
+            color: "#afafaf",
+          }}
+        >
           https://year-reflection.vercel.app
         </span>
-      </div>
+      </div> */}
+
+      <footer>
+        <div
+          style={{
+            maxWidth: "672px",
+            margin: "0 auto",
+            padding: "50px 10px 0px 10px",
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+          <div>
+            <img
+              src="/images/qrcode.png"
+              alt="QR Code"
+              style={{
+                width: "100px",
+                height: "100px",
+                opacity: 0.6,
+                transition: "opacity 0.3s",
+              }}
+            />
+          </div>
+          <div
+            style={{
+              textAlign: "center",
+              fontSize: "28px",
+              color: "#737373",
+              zIndex: 1,
+              fontWeight: 600,
+              letterSpacing: "0.05em",
+            }}
+          >
+            Season's Reflections • Thrive
+            <br />
+            <span
+              style={{
+                color: "#afafaf",
+              }}
+            >
+              https://year-reflection.vercel.app
+            </span>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 });
