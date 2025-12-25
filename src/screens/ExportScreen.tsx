@@ -53,6 +53,7 @@ export function ExportScreen({
   const [selectedLang, setSelectedLang] = useState<"en" | "th">("th");
   const [copiedEn, setCopiedEn] = useState(false);
   const [copiedTh, setCopiedTh] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   const hasEnvApiKey = !!import.meta.env.VITE_GEMINI_API_KEY;
   const STORAGE_KEY = "spirit-animal-result";
@@ -96,6 +97,7 @@ export function ExportScreen({
       return;
     }
 
+    setIsExporting(true);
     try {
       if (ref.current) {
         await waitForImages(ref.current);
@@ -114,6 +116,8 @@ export function ExportScreen({
     } catch (error) {
       console.error("Failed to generate image:", error);
       alert(t("exportScreen.failedGenerate"));
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -126,6 +130,7 @@ export function ExportScreen({
       return;
     }
 
+    setIsExporting(true);
     try {
       if (ref.current) {
         await waitForImages(ref.current);
@@ -167,6 +172,8 @@ export function ExportScreen({
     } catch (error) {
       console.error("Failed to share:", error);
       handleDownload(ref, title);
+    } finally {
+      setIsExporting(false);
     }
   };
 
@@ -335,19 +342,35 @@ export function ExportScreen({
           <div className="space-y-3 pt-2">
             <Button
               onClick={() => handleShare(previewRef, "2025-reflections")}
-              iconLeft={<Instagram className="w-5 h-5" />}
+              disabled={isExporting}
+              iconLeft={
+                isExporting ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                ) : (
+                  <Instagram className="w-5 h-5" />
+                )
+              }
               className="w-full h-12 bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-lg shadow-purple-500/25 hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all border-none"
             >
-              {t("exportScreen.shareInstagram")}
+              {isExporting
+                ? "Preparing image..."
+                : t("exportScreen.shareInstagram")}
             </Button>
 
             <Button
               onClick={() => handleDownload(previewRef, "2025-reflections")}
+              disabled={isExporting}
               variant="outlined"
-              iconLeft={<Download className="w-5 h-5" />}
+              iconLeft={
+                isExporting ? (
+                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-purple-600"></div>
+                ) : (
+                  <Download className="w-5 h-5" />
+                )
+              }
               className="w-full h-12 border-neutral-200 hover:border-purple-300 hover:bg-purple-50 hover:text-purple-700 transition-colors"
             >
-              {t("exportScreen.downloadImage")}
+              {isExporting ? "Saving..." : t("exportScreen.downloadImage")}
             </Button>
             {/* 
             <div className="flex gap-4 pt-6 border-t border-neutral-100/50">
@@ -529,10 +552,17 @@ export function ExportScreen({
                       `my-spirit-animal-${animalResult.animal}`
                     )
                   }
-                  iconLeft={<Instagram className="w-5 h-5" />}
+                  disabled={isExporting}
+                  iconLeft={
+                    isExporting ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    ) : (
+                      <Instagram className="w-5 h-5" />
+                    )
+                  }
                   className="w-full h-12 bg-gradient-to-r from-purple-600 to-pink-600 border-none text-white shadow-lg shadow-purple-500/20 hover:shadow-purple-500/40 hover:-translate-y-0.5 transition-all"
                 >
-                  Share to Instagram
+                  {isExporting ? "Preparing image..." : "Share to Instagram"}
                 </Button>
                 {/* <Button
                   onClick={() =>
