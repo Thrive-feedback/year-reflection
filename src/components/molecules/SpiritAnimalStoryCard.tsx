@@ -278,6 +278,7 @@ export const SpiritAnimalStoryCard = forwardRef<
             }}
           />
           <img
+            key={`animal-${animalResult.animal}`}
             src={getAnimalImage(animalResult.animal)}
             alt={animalResult.animal}
             crossOrigin="anonymous"
@@ -473,6 +474,7 @@ export const SpiritAnimalStoryCard = forwardRef<
             <img
               src="/images/qrcode.png"
               alt="QR Code"
+              crossOrigin="anonymous"
               style={{
                 width: "100px",
                 height: "100px",

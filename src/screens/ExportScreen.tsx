@@ -57,6 +57,23 @@ export function ExportScreen({
   const hasEnvApiKey = !!import.meta.env.VITE_GEMINI_API_KEY;
   const STORAGE_KEY = "spirit-animal-result";
 
+  // Helper function to wait for all images to load
+  const waitForImages = async (element: HTMLElement) => {
+    const images = Array.from(element.getElementsByTagName("img"));
+    const promises = images.map((img) => {
+      if (img.complete) return Promise.resolve();
+      return new Promise((resolve, reject) => {
+        img.onload = resolve;
+        img.onerror = reject;
+        // Also check if it's already complete in case of race condition
+        setTimeout(() => resolve(null), 2000); // 2s timeout fallback
+      });
+    });
+    await Promise.all(promises);
+    // Extra small buffer for layout/styles to settle
+    await new Promise((resolve) => setTimeout(resolve, 150));
+  };
+
   // Load saved result from localStorage on mount
   useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -80,6 +97,9 @@ export function ExportScreen({
     }
 
     try {
+      if (ref.current) {
+        await waitForImages(ref.current);
+      }
       const { toPng } = await import("html-to-image");
       const dataUrl = await toPng(ref.current, {
         quality: 1,
@@ -107,6 +127,9 @@ export function ExportScreen({
     }
 
     try {
+      if (ref.current) {
+        await waitForImages(ref.current);
+      }
       const { toBlob } = await import("html-to-image");
       const blob = await toBlob(ref.current, {
         quality: 1,
@@ -326,7 +349,7 @@ export function ExportScreen({
             >
               {t("exportScreen.downloadImage")}
             </Button>
-{/* 
+            {/* 
             <div className="flex gap-4 pt-6 border-t border-neutral-100/50">
               <Button
                 onClick={onBack}
