@@ -491,10 +491,11 @@ export const SpiritAnimalStoryCard = forwardRef<
               letterSpacing: "0.05em",
             }}
           >
-            Season's Reflections • Thrive
+            Find your spirit animal • Thrive
             <br />
             <span
               style={{
+                fontSize: "28px",
                 color: "#afafaf",
               }}
             >
