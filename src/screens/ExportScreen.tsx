@@ -80,27 +80,16 @@ export function ExportScreen({
     }
 
     try {
-      // @ts-ignore
-      const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(ref.current, {
-        scale: 2,
-        backgroundColor: null,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        foreignObjectRendering: false,
-        onclone: (clonedDoc: Document) => {
-          // Remove all style elements to prevent oklch parsing issues if any
-          const styles = clonedDoc.querySelectorAll(
-            'style, link[rel="stylesheet"]'
-          );
-          styles.forEach((style) => style.remove());
-        },
+      const { toPng } = await import("html-to-image");
+      const dataUrl = await toPng(ref.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: "#fafafa",
       });
 
       const link = document.createElement("a");
       link.download = `${filename}-${Date.now()}.png`;
-      link.href = canvas.toDataURL("image/png");
+      link.href = dataUrl;
       link.click();
     } catch (error) {
       console.error("Failed to generate image:", error);
@@ -118,51 +107,40 @@ export function ExportScreen({
     }
 
     try {
-      // @ts-ignore
-      const html2canvas = (await import("html2canvas")).default;
-      const canvas = await html2canvas(ref.current, {
-        scale: 2,
-        backgroundColor: null,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        foreignObjectRendering: false,
-        onclone: (clonedDoc: Document) => {
-          const styles = clonedDoc.querySelectorAll(
-            'style, link[rel="stylesheet"]'
-          );
-          styles.forEach((style) => style.remove());
-        },
+      const { toBlob } = await import("html-to-image");
+      const blob = await toBlob(ref.current, {
+        quality: 1,
+        pixelRatio: 2,
+        backgroundColor: "#fafafa",
       });
 
-      canvas.toBlob(async (blob) => {
-        if (!blob) {
-          console.error("Failed to create blob");
-          return;
-        }
+      if (!blob) {
+        console.error("Failed to create blob");
+        alert(t("exportScreen.failedGenerate"));
+        return;
+      }
 
-        const file = new File([blob], `${title}.png`, {
-          type: "image/png",
-        });
+      const file = new File([blob], `${title}.png`, {
+        type: "image/png",
+      });
 
-        if (navigator.share && navigator.canShare({ files: [file] })) {
-          try {
-            await navigator.share({
-              files: [file],
-              title: title,
-              text: "My 2025 Year Reflection",
-            });
-          } catch (error) {
-            console.error("Share failed:", error);
-          }
-        } else {
-          // Fallback to download if sharing is not supported
-          const link = document.createElement("a");
-          link.download = `${title}-${Date.now()}.png`;
-          link.href = canvas.toDataURL("image/png");
-          link.click();
+      if (navigator.share && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({
+            files: [file],
+            title: title,
+            text: "My 2025 Year Reflection",
+          });
+        } catch (error) {
+          console.error("Share failed:", error);
         }
-      }, "image/png");
+      } else {
+        // Fallback to download if sharing is not supported
+        const link = document.createElement("a");
+        link.download = `${title}-${Date.now()}.png`;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+      }
     } catch (error) {
       console.error("Failed to share:", error);
       handleDownload(ref, title);
