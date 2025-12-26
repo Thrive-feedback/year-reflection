@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { ReflectionWriter } from "./screens/ReflectionWriter";
 import { ExportScreen } from "./screens/ExportScreen";
 import { IntroScreen } from "./screens/IntroScreen";
@@ -38,10 +38,26 @@ export default function App() {
     }
   }, [reflections]);
 
-  const FIXED_TOPICS = t("topicSelection.topics") as unknown as string[];
+  const FIXED_TOPICS = React.useMemo(
+    () => t("topicSelection.topics") as unknown as string[],
+    [t]
+  );
   const currentTopicIndex = reflections.length;
   const isComplete = currentTopicIndex >= FIXED_TOPICS.length;
   const shouldShowIntro = !hasStarted && reflections.length === 0;
+
+  // Memoize snowflakes to prevent them from jumping around on ہر re-render
+  const snowflakes = React.useMemo(() => {
+    return [...Array(150)].map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `-${Math.random() * 20}%`,
+      delay: `${Math.random() * 10}s`,
+      duration: `${10 + Math.random() * 20}s`,
+      opacity: 0.8 + Math.random() * 0.2,
+      size: `${6 + Math.random() * 6}px`,
+    }));
+  }, []);
 
   const handleReflectionComplete = (text: string) => {
     const newReflection: Reflection = {
@@ -116,23 +132,23 @@ export default function App() {
 
         {/* Christmas Snow Effect */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
-          {[...Array(150)].map((_, i) => (
+          {snowflakes.map((snow) => (
             <div
-              key={i}
+              key={snow.id}
               className="absolute animate-snowfall"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `-${Math.random() * 20}%`,
-                animationDelay: `${Math.random() * 10}s`,
-                animationDuration: `${10 + Math.random() * 20}s`,
-                opacity: 0.8 + Math.random() * 0.2,
+                left: snow.left,
+                top: snow.top,
+                animationDelay: snow.delay,
+                animationDuration: snow.duration,
+                opacity: snow.opacity,
               }}
             >
               <div
                 className="bg-white rounded-full shadow-[0_0_12px_rgba(255,255,255,0.8)]"
                 style={{
-                  width: `${6 + Math.random() * 6}px`,
-                  height: `${6 + Math.random() * 6}px`,
+                  width: snow.size,
+                  height: snow.size,
                   filter: "blur(0.5px)",
                 }}
               />
@@ -161,7 +177,10 @@ export default function App() {
         {/* Main Content */}
         <div className="max-w-2xl mx-auto px-4 pb-12">
           {shouldShowIntro ? (
-            <IntroScreen onStart={() => setHasStarted(true)} />
+            <IntroScreen
+              key="intro-screen"
+              onStart={() => setHasStarted(true)}
+            />
           ) : !isComplete ? (
             <ReflectionWriter
               key={currentTopicIndex}

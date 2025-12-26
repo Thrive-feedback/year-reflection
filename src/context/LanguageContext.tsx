@@ -60,8 +60,13 @@ export function LanguageProvider({ children }: LanguageProviderProps) {
     return getNestedValue(translations[language], key);
   };
 
+  const contextValue = React.useMemo(
+    () => ({ language, setLanguage, t }),
+    [language]
+  );
+
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={contextValue}>
       {children}
     </LanguageContext.Provider>
   );
