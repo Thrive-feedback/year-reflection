@@ -45,7 +45,7 @@ export function IntroScreen({ onStart }: IntroScreenProps) {
           className="text-lg text-neutral-500 font-medium leading-relaxed animate-slide-up"
           style={{ animationDelay: "0.4s" }}
         >
-          Reflect on your journey through 4 meaningful questions and let AI
+          Reflect on your journey through 5 meaningful questions and let AI
           reveal your inner nature.
         </p>
       </div>

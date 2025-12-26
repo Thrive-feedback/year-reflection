@@ -1,13 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import {
-  Download,
-  ArrowLeft,
-  Share2,
-  Sparkles,
-  Copy,
-  Check,
-  Instagram,
-} from "lucide-react";
+import { Download, Sparkles, Instagram } from "lucide-react";
 import type { Reflection } from "../App";
 import { StoryPreview } from "../components/molecules/StoryPreview";
 import { SpiritAnimalStoryCard } from "../components/molecules/SpiritAnimalStoryCard";
@@ -274,32 +266,6 @@ export function ExportScreen({
         </p>
       </div>
 
-      {/* Export Mode Toggle */}
-      {/* <div className="max-w-2xl mx-auto">
-        <div className="glass-panel p-1.5 rounded-2xl flex gap-1 relative">
-          <button
-            onClick={() => setExportMode("image")}
-            className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
-              exportMode === "image"
-                ? "bg-white text-purple-700 shadow-sm"
-                : "text-neutral-500 hover:bg-white/40 hover:text-neutral-700"
-            }`}
-          >
-            Spirit Animal
-          </button>
-          <button
-            onClick={() => setExportMode("plainText")}
-            className={`flex-1 py-3 px-6 rounded-xl text-sm font-bold uppercase tracking-wider transition-all duration-300 ${
-              exportMode === "plainText"
-                ? "bg-white text-purple-700 shadow-sm"
-                : "text-neutral-500 hover:bg-white/40 hover:text-neutral-700"
-            }`}
-          >
-            Plain Text
-          </button>
-        </div>
-      </div> */}
-
       {exportMode === "plainText" ? (
         <div className="glass-panel rounded-3xl p-6 md:p-8 space-y-8 animate-fade-in">
           {/* Template Selection */}
@@ -402,24 +368,6 @@ export function ExportScreen({
             >
               {isExporting ? "Saving..." : t("exportScreen.downloadImage")}
             </Button>
-            {/* 
-            <div className="flex gap-4 pt-6 border-t border-neutral-100/50">
-              <Button
-                onClick={onBack}
-                variant="text"
-                iconLeft={<ArrowLeft className="w-4 h-4" />}
-                className="flex-1 text-neutral-500 hover:text-neutral-800"
-              >
-                {t("exportScreen.addMore")}
-              </Button>
-              <Button
-                onClick={onStartOver}
-                variant="text"
-                className="flex-1 text-neutral-500 hover:text-red-600 hover:bg-red-50/50"
-              >
-                {t("exportScreen.startOver")}
-              </Button>
-            </div> */}
           </div>
         </div>
       ) : (
@@ -602,79 +550,9 @@ export function ExportScreen({
                 >
                   Reflect Again (Reset All)
                 </Button>
-                {/* <Button
-                  onClick={() =>
-                    handleDownload(
-                      spiritAnimalRef,
-                      `my-spirit-animal-${animalResult.animal}`
-                    )
-                  }
-                  variant="outlined"
-                  iconLeft={<Download className="w-4 h-4" />}
-                  className="w-full h-12 border-neutral-200 bg-white/50 hover:bg-white hover:border-purple-200 hover:text-purple-700 backdrop-blur-sm"
-                >
-                  Download Card as Image
-                </Button> */}
               </div>
-
-              {/* Plain Text Display */}
-              {/* <div className="mt-8 pt-6 border-t border-neutral-200/50">
-                <div className="flex items-center justify-between mb-3">
-                  <span className="text-xs font-bold text-neutral-400 uppercase tracking-widest">
-                    Copy Text
-                  </span>
-                  <button
-                    onClick={() =>
-                      handleCopyText(
-                        selectedLang === "en"
-                          ? selectedVersion === 1
-                            ? animalResult.version1En
-                            : animalResult.version2En
-                          : selectedVersion === 1
-                          ? animalResult.version1Th
-                          : animalResult.version2Th,
-                        selectedLang
-                      )
-                    }
-                    className="flex items-center gap-1.5 text-xs font-medium text-purple-600 hover:text-purple-800 transition-colors px-3 py-1.5 rounded-full bg-purple-50 hover:bg-purple-100"
-                  >
-                    {(selectedLang === "en" ? copiedEn : copiedTh) ? (
-                      <>
-                        <Check className="w-3 h-3" />
-                        <span>Copied</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3 h-3" />
-                        <span>Copy</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-                <div className="p-5 bg-white/60 backdrop-blur-sm rounded-xl text-sm text-neutral-600 leading-relaxed border border-white/50 shadow-inner">
-                  {selectedLang === "en"
-                    ? selectedVersion === 1
-                      ? animalResult.version1En
-                      : animalResult.version2En
-                    : selectedVersion === 1
-                    ? animalResult.version1Th
-                    : animalResult.version2Th}
-                </div>
-              </div> */}
             </div>
           )}
-
-          {/* Back Button */}
-          {/* <div className="pt-2 border-t border-neutral-100/50">
-            <Button
-              onClick={onBack}
-              variant="text"
-              iconLeft={<ArrowLeft className="w-4 h-4" />}
-              className="w-full text-neutral-500 hover:text-neutral-800"
-            >
-              Back to Reflections
-            </Button>
-          </div> */}
         </div>
       )}
     </div>
