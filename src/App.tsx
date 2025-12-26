@@ -74,6 +74,7 @@ export default function App() {
     if (confirm(t("app.confirmStartOver"))) {
       setReflections([]);
       localStorage.removeItem("new-year-reflections");
+      localStorage.removeItem("spirit-animal-result");
       setCurrentText("");
     }
   };
