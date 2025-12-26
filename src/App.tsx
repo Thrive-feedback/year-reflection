@@ -17,6 +17,16 @@ export default function App() {
   const [currentText, setCurrentText] = useState<string>("");
   const [hasStarted, setHasStarted] = useState(false);
 
+  // Detect Instagram/In-App browser for safe mode
+  const isInstagram = React.useMemo(() => {
+    if (typeof window === "undefined") return false;
+    const ua =
+      window.navigator.userAgent ||
+      window.navigator.vendor ||
+      (window as any).opera;
+    return /Instagram|FBAN|FBAV|Line/i.test(ua);
+  }, []);
+
   // Load saved reflections from localStorage
   useEffect(() => {
     const saved = localStorage.getItem("new-year-reflections");
@@ -46,9 +56,11 @@ export default function App() {
   const isComplete = currentTopicIndex >= FIXED_TOPICS.length;
   const shouldShowIntro = !hasStarted && reflections.length === 0;
 
-  // Memoize snowflakes to prevent them from jumping around on ہر re-render
+  // Memoize snowflakes - Reduce count significantly for all, and disable if Instagram to save memory
   const snowflakes = React.useMemo(() => {
-    return [...Array(150)].map((_, i) => ({
+    if (isInstagram) return [];
+
+    return [...Array(40)].map((_, i) => ({
       id: i,
       left: `${Math.random() * 100}%`,
       top: `-${Math.random() * 20}%`,
@@ -57,7 +69,7 @@ export default function App() {
       opacity: 0.8 + Math.random() * 0.2,
       size: `${6 + Math.random() * 6}px`,
     }));
-  }, []);
+  }, [isInstagram]);
 
   const handleReflectionComplete = (text: string) => {
     const newReflection: Reflection = {
@@ -98,25 +110,25 @@ export default function App() {
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {/* Orb 1: Brand Purple (Top Left) */}
         <div
-          className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-200/25 blur-[100px] animate-pulse"
+          className="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] rounded-full bg-purple-200/25 blur-[60px] md:blur-[100px] animate-pulse"
           style={{ animationDuration: "4s" }}
         />
 
         {/* Orb 2: Soft Blue/Teal (Top Right) */}
         <div
-          className="absolute top-[-5%] right-[-10%] w-[40%] h-[60%] rounded-full bg-teal-200/20 blur-[120px] animate-pulse"
+          className="absolute top-[-5%] right-[-10%] w-[40%] h-[60%] rounded-full bg-teal-200/20 blur-[80px] md:blur-[120px] animate-pulse"
           style={{ animationDuration: "7s", animationDelay: "1s" }}
         />
 
         {/* Orb 3: Warm Rose/Pink (Bottom Left) */}
         <div
-          className="absolute bottom-[-10%] left-[10%] w-[45%] h-[45%] rounded-full bg-rose-200/20 blur-[110px] animate-pulse"
+          className="absolute bottom-[-10%] left-[10%] w-[45%] h-[45%] rounded-full bg-rose-200/20 blur-[70px] md:blur-[110px] animate-pulse"
           style={{ animationDuration: "6s", animationDelay: "2s" }}
         />
 
         {/* Orb 4: Subtle Yellow (Bottom Right) */}
         <div
-          className="absolute bottom-[10%] right-[-5%] w-[35%] h-[50%] rounded-full bg-yellow-100/25 blur-[90px] animate-pulse"
+          className="absolute bottom-[10%] right-[-5%] w-[35%] h-[50%] rounded-full bg-yellow-100/25 blur-[50px] md:blur-[90px] animate-pulse"
           style={{ animationDuration: "5s", animationDelay: "0.5s" }}
         />
 
@@ -181,6 +193,7 @@ export default function App() {
             <IntroScreen
               key="intro-screen"
               onStart={() => setHasStarted(true)}
+              isInstagram={isInstagram}
             />
           ) : !isComplete ? (
             <ReflectionWriter

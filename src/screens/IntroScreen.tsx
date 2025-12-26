@@ -3,14 +3,17 @@ import { Sparkles, ArrowRight } from "lucide-react";
 
 interface IntroScreenProps {
   onStart: () => void;
+  isInstagram?: boolean;
 }
 
-export function IntroScreen({ onStart }: IntroScreenProps) {
+export function IntroScreen({ onStart, isInstagram }: IntroScreenProps) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] text-center space-y-12 animate-fade-in px-4 py-3 mt-12">
       {/* Visual Element */}
       <div className="relative group">
-        <div className="absolute inset-0 bg-purple-500/20 blur-[60px] rounded-full animate-pulse group-hover:bg-purple-500/30 transition-all duration-700" />
+        {!isInstagram && (
+          <div className="absolute inset-0 bg-purple-500/20 blur-[60px] rounded-full animate-pulse group-hover:bg-purple-500/30 transition-all duration-700" />
+        )}
         <div className="relative glass-panel p-8 rounded-[3rem] border-white/60 shadow-2xl shadow-purple-500/10">
           <div className="w-24 h-24 rounded-2xl flex items-center justify-center overflow-hidden animate-float">
             <img
@@ -69,33 +72,35 @@ export function IntroScreen({ onStart }: IntroScreenProps) {
         </p>
       </div>
 
-      {/* Subtle Background Animal Silhouettes (Optional visual flair) */}
-      <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03] z-[-1]">
-        <div
-          className="absolute top-1/4 left-1/4 animate-float text-8xl"
-          style={{ animationDelay: "1s" }}
-        >
-          🦉
+      {/* Subtle Background Animal Silhouettes - Disabled in Instagram/Safe Mode */}
+      {!isInstagram && (
+        <div className="fixed inset-0 pointer-events-none overflow-hidden opacity-[0.03] z-[-1]">
+          <div
+            className="absolute top-1/4 left-1/4 animate-float text-8xl"
+            style={{ animationDelay: "1s" }}
+          >
+            🦉
+          </div>
+          <div
+            className="absolute top-1/3 right-1/4 animate-float text-8xl"
+            style={{ animationDelay: "3s", animationDuration: "8s" }}
+          >
+            🦦
+          </div>
+          <div
+            className="absolute bottom-1/4 left-1/3 animate-float text-8xl"
+            style={{ animationDelay: "5s", animationDuration: "10s" }}
+          >
+            🦫
+          </div>
+          <div
+            className="absolute bottom-1/3 right-1/3 animate-float text-8xl"
+            style={{ animationDelay: "2s", animationDuration: "7s" }}
+          >
+            🦦
+          </div>
         </div>
-        <div
-          className="absolute top-1/3 right-1/4 animate-float text-8xl"
-          style={{ animationDelay: "3s", animationDuration: "8s" }}
-        >
-          🦦
-        </div>
-        <div
-          className="absolute bottom-1/4 left-1/3 animate-float text-8xl"
-          style={{ animationDelay: "5s", animationDuration: "10s" }}
-        >
-          🦫
-        </div>
-        <div
-          className="absolute bottom-1/3 right-1/3 animate-float text-8xl"
-          style={{ animationDelay: "2s", animationDuration: "7s" }}
-        >
-          🦦
-        </div>
-      </div>
+      )}
     </div>
   );
 }
