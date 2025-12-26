@@ -58,7 +58,16 @@ export default function App() {
 
   // Memoize snowflakes - Reduce count significantly for all, and disable if Instagram to save memory
   const snowflakes = React.useMemo(() => {
-    if (isInstagram) return [];
+    if (isInstagram)
+      return [...Array(15)].map((_, i) => ({
+        id: i,
+        left: `${Math.random() * 100}%`,
+        top: `-${Math.random() * 20}%`,
+        delay: `${Math.random() * 10}s`,
+        duration: `${10 + Math.random() * 20}s`,
+        opacity: 0.8 + Math.random() * 0.2,
+        size: `${6 + Math.random() * 6}px`,
+      }));
 
     return [...Array(40)].map((_, i) => ({
       id: i,
