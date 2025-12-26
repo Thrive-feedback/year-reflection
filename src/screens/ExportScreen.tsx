@@ -141,59 +141,113 @@ export function ExportScreen({
     }
   };
 
+  const [preGeneratedBlob, setPreGeneratedBlob] = useState<Blob | null>(null);
+  const [isPreGenerating, setIsPreGenerating] = useState(false);
+
+  // ... existing code
+
+  // 2. REFACTOR: Separate the generation logic so we can reuse it
+  const generateBlobFromRef = async (element: HTMLElement) => {
+    // Wait for fonts
+    await document.fonts.ready;
+    // Wait for images
+    await waitForImages(element);
+    // Convert images
+    await convertImagesToDataUrls(element);
+    // Tiny pause for layout to settle
+    await new Promise((resolve) => setTimeout(resolve, 100));
+
+    const { toBlob, toPng } = await import("html-to-image");
+
+    const options = {
+      quality: 0.95,
+      pixelRatio: 3, // High quality for Instagram
+      backgroundColor: "#fafafa",
+      cacheBust: true,
+      skipAutoScale: true,
+      style: { fontFamily: "system-ui, -apple-system, sans-serif" },
+    };
+
+    // "Dry run" to warm up the cache (Fixes the white screen issue)
+    await toPng(element, options);
+
+    // Actual blob generation
+    const blob = await toBlob(element, options);
+    return blob;
+  };
+
+  // 3. NEW EFFECT: Trigger generation automatically when content changes
+  useEffect(() => {
+    const activeRef = exportMode === "plainText" ? previewRef : spiritAnimalRef;
+
+    setPreGeneratedBlob(null);
+
+    if (!activeRef.current) return;
+
+    const timer = setTimeout(async () => {
+      if (!activeRef.current) return;
+
+      try {
+        setIsPreGenerating(true);
+        console.log("Started background image generation...");
+
+        const blob = await generateBlobFromRef(activeRef.current);
+
+        if (blob) {
+          setPreGeneratedBlob(blob);
+          console.log("Background generation complete. Ready to share.");
+        }
+      } catch (err) {
+        console.error("Background generation failed:", err);
+      } finally {
+        setIsPreGenerating(false);
+      }
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, [exportMode, template, animalResult, selectedLang, selectedVersion]);
+
   const handleShare = async (
     ref: React.RefObject<HTMLDivElement | null>,
     title: string
   ) => {
-    if (!ref.current) {
-      console.error("Preview ref is not available");
-      return;
-    }
-
     setIsExporting(true);
+
     try {
-      if (ref.current) {
-        await waitForImages(ref.current);
-        await convertImagesToDataUrls(ref.current);
-      }
-      const { toBlob } = await import("html-to-image");
-      const blob = await toBlob(ref.current, {
-        quality: 1,
-        pixelRatio: 2,
-        backgroundColor: "#fafafa",
-        cacheBust: true,
-      });
+      let blobToShare = preGeneratedBlob;
 
-      if (!blob) {
-        console.error("Failed to create blob");
-        alert(t("exportScreen.failedGenerate"));
-        return;
+      if (!blobToShare) {
+        console.log("Pre-generation not ready, generating on-the-fly...");
+        if (!ref.current) return;
+        blobToShare = await generateBlobFromRef(ref.current);
       }
 
-      const file = new File([blob], `${title}.png`, {
+      if (!blobToShare) {
+        throw new Error("Failed to create image blob");
+      }
+
+      const file = new File([blobToShare], `${title}.png`, {
         type: "image/png",
       });
 
       if (navigator.share && navigator.canShare({ files: [file] })) {
-        try {
-          await navigator.share({
-            files: [file],
-            title: title,
-            text: "My 2025 Year Reflection",
-          });
-        } catch (error) {
-          console.error("Share failed:", error);
-        }
+        await navigator.share({
+          files: [file],
+          title: title,
+        });
       } else {
-        // Fallback to download if sharing is not supported
+        // Fallback for desktop/unsupported browsers
         const link = document.createElement("a");
         link.download = `${title}-${Date.now()}.png`;
-        link.href = URL.createObjectURL(blob);
+        link.href = URL.createObjectURL(blobToShare);
         link.click();
       }
     } catch (error) {
-      console.error("Failed to share:", error);
-      handleDownload(ref, title);
+      // Ignore AbortError (user cancelled share menu)
+      if ((error as Error).name !== "AbortError") {
+        console.error("Share failed:", error);
+        alert(t("exportScreen.failedGenerate"));
+      }
     } finally {
       setIsExporting(false);
     }
