@@ -7,13 +7,17 @@ interface IntroScreenProps {
 
 export function IntroScreen({ onStart }: IntroScreenProps) {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center space-y-12 animate-fade-in px-4">
+    <div className="flex flex-col items-center justify-center min-h-[80vh] text-center space-y-12 animate-fade-in px-4 py-3 mt-12">
       {/* Visual Element */}
       <div className="relative group">
         <div className="absolute inset-0 bg-purple-500/20 blur-[60px] rounded-full animate-pulse group-hover:bg-purple-500/30 transition-all duration-700" />
         <div className="relative glass-panel p-8 rounded-[3rem] border-white/60 shadow-2xl shadow-purple-500/10">
-          <div className="w-24 h-24 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-white shadow-lg animate-float">
-            <Sparkles className="w-12 h-12" />
+          <div className="w-24 h-24 rounded-2xl flex items-center justify-center overflow-hidden animate-float">
+            <img
+              src="/images/logo/thrive_logo.png"
+              alt="Thrive Logo"
+              className="w-full h-full object-contain"
+            />
           </div>
         </div>
       </div>
